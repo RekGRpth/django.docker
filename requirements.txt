@@ -65,8 +65,6 @@ keyring==0.9.2
 kombu==2.5.7
 lazr.uri==1.0.3
 logan==0.5.5
-lxml==3.1.0
-meld3==0.6.10
 memory-profiler==0.43
 mongoengine==0.8.7
 netaddr==0.7.12
