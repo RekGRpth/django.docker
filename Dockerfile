@@ -11,6 +11,7 @@ RUN apt-get update --yes --quiet && \
         libffi-dev \
         libxml2-dev \
         libpq-dev \
+        libssl-dev \
         locales \
         nginx-full \
         python-dev \
@@ -44,7 +45,7 @@ ADD supervisord.conf /etc/supervisor/conf.d/
 ADD uwsgi.ini /etc/uwsgi/apps-enabled/
 ADD requirements.txt /home/user/
 
-RUN pip install --requirement /home/user/requirements.txt
+#RUN pip install --requirement /home/user/requirements.txt
 
 ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh
