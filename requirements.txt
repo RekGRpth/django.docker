@@ -23,7 +23,6 @@ cssutils==0.9.10b1
 dbf==0.95.004
 decorator==3.4.0
 django-auth-ldap==1.1.4
-django-autocomplete==1.0.dev49
 django-bootstrap-toolkit==2.15.0
 django-celery==3.0.11
 django-crispy-forms==1.2.3
