@@ -10,6 +10,8 @@ RUN apt-get update --yes --quiet && \
         locales \
         nginx-full \
         python-pip \
+        python-setuptools \
+        python-dev \
         supervisor \
         uwsgi \
         uwsgi-plugin-python \
