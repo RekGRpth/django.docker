@@ -5,13 +5,15 @@ MAINTAINER RekGRpth
 RUN apt-get update --yes --quiet && \
     apt-get full-upgrade --yes --quiet && \
     apt-get install --yes --quiet --no-install-recommends \
+        build-essential \
         ca-certificates \
         ipython \
+        libxml2-dev \
         locales \
         nginx-full \
+        python-dev \
         python-pip \
         python-setuptools \
-        python-dev \
         supervisor \
         uwsgi \
         uwsgi-plugin-python \
@@ -40,7 +42,7 @@ ADD supervisord.conf /etc/supervisor/conf.d/
 ADD uwsgi.ini /etc/uwsgi/apps-enabled/
 ADD requirements.txt /home/user/
 
-RUN pip install --requirement /home/user/requirements.txt
+#RUN pip install --requirement /home/user/requirements.txt
 
 ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh
