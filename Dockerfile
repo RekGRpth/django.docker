@@ -14,6 +14,7 @@ RUN apt-get update --yes --quiet && \
         libsasl2-dev \
         libssl-dev \
         libxml2-dev \
+        libxslt1-dev \
         locales \
         nginx-full \
         python-dev \
@@ -22,6 +23,7 @@ RUN apt-get update --yes --quiet && \
         supervisor \
         uwsgi \
         uwsgi-plugin-python \
+        zlib1g-dev \
         && \
     mkdir --parents /home/user && \
     groupadd --system user && \
@@ -47,7 +49,7 @@ ADD supervisord.conf /etc/supervisor/conf.d/
 ADD uwsgi.ini /etc/uwsgi/apps-enabled/
 ADD requirements.txt /home/user/
 
-RUN pip install --requirement /home/user/requirements.txt
+#RUN pip install --requirement /home/user/requirements.txt
 
 ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh
