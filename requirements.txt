@@ -2,7 +2,6 @@ BeautifulSoup==3.2.1
 Cheetah==2.4.4
 Django==1.4.5
 Django-Select2==4.2.2
-MySQL-python==1.2.3
 PAM==0.4.2
 Pillow==2.9.0
 PyJWT==1.4.0
