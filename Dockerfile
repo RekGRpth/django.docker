@@ -34,7 +34,6 @@ RUN apt-get update --yes --quiet && \
     apt-get clean --quiet --yes && \
     rm --recursive --force /var/lib/apt/lists/* && \
     chown -R user:user /home/user && \
-    localedef --inputfile=ru_RU --force --charmap=UTF-8 --alias-file=/usr/share/locale/locale.alias ru_RU.UTF-8 && \
     rm --force /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default && \
     echo "daemon off;" >> /etc/nginx/nginx.conf && \
     echo '"\e[A": history-search-backward' >> /etc/inputrc && \
