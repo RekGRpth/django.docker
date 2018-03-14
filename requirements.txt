@@ -7,7 +7,6 @@ PyJWT==1.4.0
 PyYAML==3.10
 Pygments==1.6
 South==0.7.6
-Twisted==12.3.0
 amqp==1.0.9
 anyjson==0.3.3
 appy==0.8.3
