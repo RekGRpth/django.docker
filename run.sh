@@ -7,9 +7,12 @@ docker volume create django && \
 docker run \
     --add-host `hostname -f`:`ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'` \
     --detach \
+    --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --env USER_ID=$(id -u) \
     --env GROUP_ID=$(id -g) \
     --env PROCESSES=4 \
+    --env PYTHONIOENCODING=UTF-8 \
+    --env PYTHONPATH="$PYTHONPATH:/home/user/django:/home/user/django/billing" \
     --hostname django \
     --name django \
     --publish 3333:3333 \

@@ -111,6 +111,7 @@ ssh-import-id==3.21
 suds==0.4
 timeout-decorator==0.3.2
 urllib3==1.7.1
+uwsgidecorators==1.1.0
 watchdog==0.8.3
 web.py==0.34
 wheel==0.24.0
