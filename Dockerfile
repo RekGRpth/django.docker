@@ -1,4 +1,4 @@
-FROM debian as deb-stage
+FROM python:2-slim-stretch as deb-stage
 
 MAINTAINER RekGRpth
 
@@ -43,7 +43,7 @@ RUN apt-get update --yes --quiet && \
 FROM deb-stage as pip-stage
 
 ADD requirements.txt /home/user/
-RUN pip install --requirement /home/user/requirements.txt
+#RUN pip install --requirement /home/user/requirements.txt
 
 FROM pip-stage
 
