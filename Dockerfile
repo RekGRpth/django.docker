@@ -36,8 +36,8 @@ RUN apt-get update --yes --quiet && \
     chown -R user:user /home/user && \
     rm --force /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default && \
     echo "daemon off;" >> /etc/nginx/nginx.conf && \
-    echo '"\e[A": history-search-backward' >> /etc/inputrc && \
-    echo '"\e[B": history-search-forward' >> /etc/inputrc
+    echo "\"\\e[A\": history-search-backward" >> /etc/inputrc && \
+    echo "\"\\e[B\": history-search-forward" >> /etc/inputrc
 
 FROM deb-stage as pip-stage
 
