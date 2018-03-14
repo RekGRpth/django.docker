@@ -1,7 +1,7 @@
 #!/bin/sh
 
-docker stop django && \
-docker rm django && \
+#docker stop django && \
+#docker rm django && \
 docker pull rekgrpth/django && \
 docker volume create django && \
 docker run \

@@ -109,7 +109,6 @@ smpplib==0.1
 sqlparse==0.1.15
 ssh-import-id==3.21
 suds==0.4
-supervisor==3.0b2
 timeout-decorator==0.3.2
 urllib3==1.7.1
 watchdog==0.8.3
