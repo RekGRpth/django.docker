@@ -1,4 +1,4 @@
-FROM debian
+FROM debian as build-stage
 
 MAINTAINER RekGRpth
 
@@ -38,6 +38,11 @@ RUN apt-get update --yes --quiet && \
     rm --force /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default && \
     echo "daemon off;" >> /etc/nginx/nginx.conf
 
+ADD requirements.txt /home/user/
+RUN pip install --requirement /home/user/requirements.txt
+
+FROM build-stage
+
 ENV HOME /home/user
 ENV LANG ru_RU.UTF-8
 ENV USER_ID 999
@@ -47,9 +52,6 @@ ENV PROCESSES auto
 ADD nginx.conf /etc/nginx/sites-enabled/
 ADD supervisord.conf /etc/supervisor/conf.d/
 ADD uwsgi.ini /etc/uwsgi/apps-enabled/
-ADD requirements.txt /home/user/
-
-RUN pip install --requirement /home/user/requirements.txt
 
 ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh
