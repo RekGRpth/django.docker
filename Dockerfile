@@ -1,4 +1,5 @@
-FROM python:2-slim-stretch as deb-stage
+#FROM python:2-slim-stretch as deb-stage
+FROM debian:stretch-slim
 
 MAINTAINER RekGRpth
 
@@ -39,12 +40,12 @@ RUN apt-get update --yes --quiet && \
     echo "\"\\e[A\": history-search-backward" >> /etc/inputrc && \
     echo "\"\\e[B\": history-search-forward" >> /etc/inputrc
 
-FROM deb-stage as pip-stage
+#FROM deb-stage as pip-stage
 
 ADD requirements.txt /home/user/
 #RUN pip install --requirement /home/user/requirements.txt
 
-FROM pip-stage
+#FROM pip-stage
 
 ENV HOME /home/user
 ENV LANG ru_RU.UTF-8

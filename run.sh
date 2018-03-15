@@ -1,7 +1,9 @@
 #!/bin/sh
 
-docker stop django && \
-docker rm django && \
+docker build --tag rekgrpth/django . && \
+docker push rekgrpth/django && \
+docker stop django
+docker rm django
 docker pull rekgrpth/django && \
 docker volume create django && \
 docker run \
