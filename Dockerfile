@@ -59,4 +59,6 @@ ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
+WORKDIR $HOME/django
+
 CMD ["/usr/bin/supervisord"]
