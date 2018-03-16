@@ -18,9 +18,29 @@ RUN apt-get update --yes --quiet && \
         libxslt1-dev \
         locales \
         nginx-full \
+        python-cairo \
+        python-celery \
+#        python-html5lib \
+        python-ipaddr \
+        python-jwt \
+#        python-ldap \
         python-dev \
+        python-mongoengine \
+        python-netaddr \
+        python-openpyxl \
+        python-paramiko \
+        python-passlib \
+        python-pika \
         python-pip \
+        python-psycopg2 \
+#        python-pypdf2 \
+#        python-reportlab \
+        python-requests \
         python-setuptools \
+        python-suds \
+        python-uwsgidecorators \
+        python-wheel \
+        python-xlwt \
         supervisor \
         uwsgi \
         uwsgi-plugin-python \
@@ -43,7 +63,10 @@ RUN apt-get update --yes --quiet && \
 #FROM deb-stage as pip-stage
 
 ADD requirements.txt /home/user/
-#RUN pip install --requirement /home/user/requirements.txt
+RUN pip install --requirement /home/user/requirements.txt
+
+COPY django-autocomplete-1.0.dev49.tar.gz /home/user/
+RUN cd /home/user && tar -zxpf django-autocomplete-1.0.dev49.tar.gz && cd django-autocomplete-1.0.dev49 && python setup.py install
 
 #FROM pip-stage
 
@@ -61,6 +84,6 @@ ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-WORKDIR $HOME/django
+WORKDIR $HOME/django/billing
 
 CMD ["/usr/bin/supervisord"]

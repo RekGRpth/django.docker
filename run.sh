@@ -1,7 +1,7 @@
 #!/bin/sh
 
-docker build --tag rekgrpth/django . && \
-docker push rekgrpth/django && \
+#docker build --tag rekgrpth/django . && \
+#docker push rekgrpth/django && \
 docker stop django
 docker rm django
 docker pull rekgrpth/django && \
@@ -12,7 +12,7 @@ docker run \
     --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --env USER_ID=$(id -u) \
     --env GROUP_ID=$(id -g) \
-    --env PROCESSES=4 \
+    --env PROCESSES=2 \
     --env PYTHONIOENCODING=UTF-8 \
     --env PYTHONPATH="$PYTHONPATH:/home/user/django:/home/user/django/billing" \
     --hostname django \
