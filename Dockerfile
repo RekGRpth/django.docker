@@ -1,5 +1,4 @@
-#FROM python:2-slim-stretch as deb-stage
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 MAINTAINER RekGRpth
 
