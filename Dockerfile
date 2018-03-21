@@ -53,8 +53,8 @@ RUN mkdir --parents /data && \
 
 ADD uuid.py /usr/lib/python2.7/
 
-ENV HOME /data \
-    LANG ru_RU.UTF-8 \
+ENV HOME=/data \
+    LANG=ru_RU.UTF-8 \
     PYTHONIOENCODING=UTF-8
 
 ADD entrypoint.sh /
