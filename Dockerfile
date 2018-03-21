@@ -2,9 +2,9 @@ FROM debian:buster-slim
 
 MAINTAINER RekGRpth
 
-RUN apt-get update --yes --quiet && \
-    apt-get full-upgrade --yes --quiet && \
-    apt-get install --yes --quiet --no-install-recommends \
+RUN apt-get update --yes --quiet \
+    && apt-get full-upgrade --yes --quiet \
+    && apt-get install --yes --quiet --no-install-recommends \
         build-essential \
         ipython \
         libffi-dev \
@@ -23,33 +23,32 @@ RUN apt-get update --yes --quiet && \
         uwsgi \
         uwsgi-plugin-python \
         zlib1g-dev \
-        && \
-    ln --force --symbolic /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime && \
-    echo "Asia/Yekaterinburg" > /etc/timezone && \
-    apt-get remove --quiet --auto-remove --yes && \
-    apt-get clean --quiet --yes && \
-    rm --recursive --force /var/lib/apt/lists/* && \
-    echo "\"\\e[A\": history-search-backward" >> /etc/inputrc && \
-    echo "\"\\e[B\": history-search-forward" >> /etc/inputrc && \
-    find -name "*.pyc" -delete
+    && ln --force --symbolic /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime \
+    && echo "Asia/Yekaterinburg" > /etc/timezone \
+    && apt-get remove --quiet --auto-remove --yes \
+    && apt-get clean --quiet --yes \
+    && rm --recursive --force /var/lib/apt/lists/* \
+    && echo "\"\\e[A\": history-search-backward" >> /etc/inputrc \
+    && echo "\"\\e[B\": history-search-forward" >> /etc/inputrc \
+    && find -name "*.pyc" -delete
 
 COPY requirements.txt /tmp/
-RUN pip install --requirement /tmp/requirements.txt && \
-    rm --force /tmp/requirements.txt && \
-    find -name "*.pyc" -delete
+RUN pip install --requirement /tmp/requirements.txt \
+    && rm --force /tmp/requirements.txt \
+    && find -name "*.pyc" -delete
 
 COPY django-autocomplete-1.0.dev49.tar.gz /tmp/
-RUN cd /tmp && \
-    tar -zxpf django-autocomplete-1.0.dev49.tar.gz && \
-    cd django-autocomplete-1.0.dev49 && \
-    python setup.py install && \
-    rm --force /tmp/django-autocomplete-1.0.dev49.tar.gz && \
-    find -name "*.pyc" -delete
+RUN cd /tmp \
+    && tar -zxpf django-autocomplete-1.0.dev49.tar.gz \
+    && cd django-autocomplete-1.0.dev49 \
+    && python setup.py install \
+    && rm --force /tmp/django-autocomplete-1.0.dev49.tar.gz \
+    && find -name "*.pyc" -delete
 
-RUN mkdir --parents /data && \
-    groupadd --system uwsgi && \
-    useradd --system --gid uwsgi --home-dir /data --shell /sbin/nologin uwsgi && \
-    chown -R uwsgi:uwsgi /data
+RUN mkdir --parents /data \
+    && groupadd --system uwsgi \
+    && useradd --system --gid uwsgi --home-dir /data --shell /sbin/nologin uwsgi \
+    && chown -R uwsgi:uwsgi /data
 
 ADD uuid.py /usr/lib/python2.7/
 
