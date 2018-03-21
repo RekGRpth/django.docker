@@ -30,18 +30,21 @@ RUN apt-get update --yes --quiet && \
     apt-get clean --quiet --yes && \
     rm --recursive --force /var/lib/apt/lists/* && \
     echo "\"\\e[A\": history-search-backward" >> /etc/inputrc && \
-    echo "\"\\e[B\": history-search-forward" >> /etc/inputrc
+    echo "\"\\e[B\": history-search-forward" >> /etc/inputrc && \
+    find -name "*.pyc" -delete
 
 COPY requirements.txt /tmp/
 RUN pip install --requirement /tmp/requirements.txt && \
-    rm --force /tmp/requirements.txt
+    rm --force /tmp/requirements.txt && \
+    find -name "*.pyc" -delete
 
 COPY django-autocomplete-1.0.dev49.tar.gz /tmp/
 RUN cd /tmp && \
     tar -zxpf django-autocomplete-1.0.dev49.tar.gz && \
     cd django-autocomplete-1.0.dev49 && \
     python setup.py install && \
-    rm --force /tmp/django-autocomplete-1.0.dev49.tar.gz
+    rm --force /tmp/django-autocomplete-1.0.dev49.tar.gz && \
+    find -name "*.pyc" -delete
 
 RUN mkdir --parents /data && \
     groupadd --system uwsgi && \
@@ -50,9 +53,9 @@ RUN mkdir --parents /data && \
 
 ADD uuid.py /usr/lib/python2.7/
 
-ENV HOME /data
-ENV LANG ru_RU.UTF-8
-ENV PYTHONIOENCODING=UTF-8
+ENV HOME /data \
+    LANG ru_RU.UTF-8 \
+    PYTHONIOENCODING=UTF-8
 
 ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh
