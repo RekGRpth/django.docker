@@ -64,6 +64,6 @@ RUN chmod +x /entrypoint.sh && usermod --home ${HOME} ${USER}
 ENTRYPOINT ["/entrypoint.sh"]
 
 VOLUME  ${HOME}
-WORKDIR ${HOME}/django/billing
+WORKDIR ${HOME}/app/billing
 
 CMD [ "uwsgi", "--ini", "/data/uwsgi.ini" ]
