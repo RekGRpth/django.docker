@@ -12,7 +12,7 @@ docker run \
     --detach \
     --env USER_ID=$(id -u) \
     --env GROUP_ID=$(id -g) \
-    --env PYTHONPATH="/data/django:/data/django/billing" \
+    --env PYTHONPATH="/data/app:/data/app/billing" \
     --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --hostname django \
     --name django \
