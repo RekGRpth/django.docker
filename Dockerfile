@@ -45,11 +45,6 @@ RUN cd /tmp \
     && rm --force /tmp/django-autocomplete-1.0.dev49.tar.gz \
     && find -name "*.pyc" -delete
 
-RUN mkdir --parents /data \
-    && groupadd --system uwsgi \
-    && useradd --system --gid uwsgi --home-dir /data --shell /sbin/nologin uwsgi \
-    && chown -R uwsgi:uwsgi /data
-
 ADD uuid.py /usr/lib/python2.7/
 
 ENV HOME=/data \
@@ -59,8 +54,13 @@ ENV HOME=/data \
     GROUP=uwsgi \
     PYTHONIOENCODING=UTF-8
 
+RUN mkdir -p "${HOME}" \
+    && groupadd --system "${GROUP}" \
+    && useradd --system --gid "${GROUP}" --home-dir "${HOME}" --shell /sbin/nologin "${USER}" \
+    && chown -R "${USER}":"${GROUP}" "${HOME}"
+
 ADD entrypoint.sh /
-RUN chmod +x /entrypoint.sh && usermod --home ${HOME} ${USER}
+RUN chmod +x /entrypoint.sh && usermod --home "${HOME}" "${USER}"
 ENTRYPOINT ["/entrypoint.sh"]
 
 VOLUME  ${HOME}
