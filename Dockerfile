@@ -54,13 +54,16 @@ ADD uuid.py /usr/lib/python2.7/
 
 ENV HOME=/data \
     LANG=ru_RU.UTF-8 \
+    TZ=Asia/Yekaterinburg \
+    USER=uwsgi \
+    GROUP=uwsgi \
     PYTHONIOENCODING=UTF-8
 
 ADD entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh && usermod --home ${HOME} ${USER}
 ENTRYPOINT ["/entrypoint.sh"]
 
-VOLUME /data
-WORKDIR /data/django/billing
+VOLUME  ${HOME}
+WORKDIR ${HOME}/django/billing
 
 CMD [ "uwsgi", "--ini", "/data/uwsgi.ini" ]
