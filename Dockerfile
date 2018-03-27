@@ -34,7 +34,9 @@ RUN apk add --no-cache \
     && tar -zxpf django-autocomplete-1.0.dev49.tar.gz \
     && cd django-autocomplete-1.0.dev49 \
     && python setup.py install \
+    && cd / \
     && rm -f /tmp/django-autocomplete-1.0.dev49.tar.gz \
+    && rm -rf /tmp/django-autocomplete-1.0.dev49 \
     && apk del \
         alpine-sdk \
         freetype-dev \
