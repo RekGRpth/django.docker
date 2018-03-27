@@ -1,48 +1,54 @@
-FROM debian:buster-slim
+FROM alpine
 
 MAINTAINER RekGRpth
 
-RUN apt-get update --yes --quiet \
-    && apt-get full-upgrade --yes --quiet \
-    && apt-get install --yes --quiet --no-install-recommends \
-        build-essential \
-        ipython \
-        libffi-dev \
-        libldap2-dev \
-        libpq-dev \
-        libsasl2-dev \
-        libssl-dev \
-        libxml2-dev \
-        libxslt1-dev \
-        locales \
-        python-cairo \
-        python-dev \
-        python-pip \
-        python-psycopg2 \
-        python-setuptools \
-        uwsgi \
-        uwsgi-plugin-python \
-        zlib1g-dev \
-    && ln --force --symbolic /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime \
-    && echo "Asia/Yekaterinburg" > /etc/timezone \
-    && apt-get remove --quiet --auto-remove --yes \
-    && apt-get clean --quiet --yes \
-    && rm --recursive --force /var/lib/apt/lists/* \
-    && echo "\"\\e[A\": history-search-backward" >> /etc/inputrc \
-    && echo "\"\\e[B\": history-search-forward" >> /etc/inputrc \
-    && find -name "*.pyc" -delete
-
 COPY requirements.txt /tmp/
-RUN pip install --requirement /tmp/requirements.txt \
-    && rm --force /tmp/requirements.txt \
-    && find -name "*.pyc" -delete
-
 COPY django-autocomplete-1.0.dev49.tar.gz /tmp/
-RUN cd /tmp \
+
+RUN apk add --no-cache \
+        alpine-sdk \
+        freetype-dev \
+        jpeg-dev \
+        lcms2-dev \
+        libffi-dev \
+        libxml2-dev \
+        libxslt \
+        libxslt-dev \
+        openjpeg-dev \
+        openldap-dev \
+        py2-cairo \
+        py2-pip \
+        py2-psycopg2 \
+        py-setuptools \
+        python \
+        python-dev \
+        shadow \
+        su-exec \
+        tiff-dev \
+        tzdata \
+        uwsgi-python \
+        zlib-dev \
+    && pip install --no-cache-dir --requirement /tmp/requirements.txt \
+    && rm -f /tmp/requirements.txt \
+    && cd /tmp \
     && tar -zxpf django-autocomplete-1.0.dev49.tar.gz \
     && cd django-autocomplete-1.0.dev49 \
     && python setup.py install \
-    && rm --force /tmp/django-autocomplete-1.0.dev49.tar.gz \
+    && rm -f /tmp/django-autocomplete-1.0.dev49.tar.gz \
+    && apk del \
+        alpine-sdk \
+        freetype-dev \
+        jpeg-dev \
+        lcms2-dev \
+        libffi-dev \
+        libxml2-dev \
+        libxslt-dev \
+        openjpeg-dev \
+        openldap-dev \
+        py2-pip \
+        python-dev \
+        tiff-dev \
+        zlib-dev \
     && find -name "*.pyc" -delete
 
 ADD uuid.py /usr/lib/python2.7/
@@ -53,11 +59,6 @@ ENV HOME=/data \
     USER=uwsgi \
     GROUP=uwsgi \
     PYTHONIOENCODING=UTF-8
-
-RUN mkdir -p "${HOME}" \
-    && groupadd --system "${GROUP}" \
-    && useradd --system --gid "${GROUP}" --home-dir "${HOME}" --shell /sbin/nologin "${USER}" \
-    && chown -R "${USER}":"${GROUP}" "${HOME}"
 
 ADD entrypoint.sh /
 RUN chmod +x /entrypoint.sh && usermod --home "${HOME}" "${USER}"
