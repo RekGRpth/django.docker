@@ -17,6 +17,7 @@ RUN apk add --no-cache \
         openjpeg-dev \
         openldap-dev \
         py2-cairo \
+        py2-dateutil \
         py2-pip \
         py2-psycopg2 \
         py-setuptools \
