@@ -3,7 +3,9 @@
 #docker build --tag rekgrpth/django . || exit $?
 #docker push rekgrpth/django || exit $?
 docker stop django
+docker stop lk-django
 docker rm django
+docker rm lk-django
 docker pull rekgrpth/django || exit $?
 docker volume create django || exit $?
 docker run \
@@ -19,3 +21,16 @@ docker run \
     --publish 4322:4322 \
     --volume django:/data \
     rekgrpth/django
+docker run \
+    --add-host `hostname -f`:`ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'` \
+    --detach \
+    --env USER_ID=$(id -u) \
+    --env GROUP_ID=$(id -g) \
+    --env PYTHONPATH="/data/app:/data/app/billing:/data/app/billing/lk" \
+    --env DJANGO_SETTINGS_MODULE="lk_settings" \
+    --hostname lk-django \
+    --name lk-django \
+    --publish 4323:4323 \
+    --volume django:/data \
+    --workdir /data/app/billing/lk \
+    rekgrpth/django uwsgi --ini /data/lk.uwsgi.ini
