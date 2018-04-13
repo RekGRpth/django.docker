@@ -11,6 +11,7 @@ RUN apk add --no-cache \
         jpeg-dev \
         lcms2-dev \
         libffi-dev \
+        libjpeg-turbo \
         libxml2-dev \
         libxslt \
         libxslt-dev \
