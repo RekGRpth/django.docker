@@ -7,32 +7,56 @@ COPY django-autocomplete-1.0.dev49.tar.gz /tmp/
 
 RUN apk add --no-cache \
         alpine-sdk \
-        freetype-dev \
-        jpeg-dev \
-        lcms2-dev \
-        libffi-dev \
-        libjpeg-turbo \
-        libxml2-dev \
-        libxslt \
-        libxslt-dev \
-        openjpeg \
-        openjpeg-dev \
+#        freetype-dev \
+#        jpeg \
+#        jpeg-dev \
+#        lcms2 \
+#        lcms2-dev \
+#        libffi \
+#        libffi-dev \
+#        libjpeg-turbo \
+#        libxml2 \
+#        libxml2-dev \
+#        libxslt \
+#        libxslt-dev \
+#        openjpeg \
+#        openjpeg-dev \
+#        openldap \
         openldap-dev \
         py2-cairo \
         py2-dateutil \
+        py2-decorator \
+        py2-httplib2 \
+        py2-ipaddress \
+        py2-lxml \
+        py2-netaddr \
+        py2-olefile \
+#        py2-paramiko \
+        py2-pexpect \
         py2-pillow \
         py2-pip \
         py2-psycopg2 \
+        py2-ptyprocess \
+        py2-pygments \
+        py2-pyldap \
+#        py2-pypdf2 \
+#        py2-reportlab \
+        py2-requests \
+        py2-six \
+        py2-snmp \
+        py2-wcwidth \
+        py-ipaddr \
         py-setuptools \
         python \
         python-dev \
         shadow \
         su-exec \
-        tiff \
-        tiff-dev \
+#        tiff \
+#        tiff-dev \
         tzdata \
         uwsgi-python \
-        zlib-dev \
+#        zlib \
+#        zlib-dev \
     && pip install --no-cache-dir --requirement /tmp/requirements.txt \
     && rm -f /tmp/requirements.txt \
     && cd /tmp \
@@ -44,18 +68,18 @@ RUN apk add --no-cache \
     && rm -rf /tmp/django-autocomplete-1.0.dev49 \
     && apk del \
         alpine-sdk \
-        freetype-dev \
-        jpeg-dev \
-        lcms2-dev \
-        libffi-dev \
-        libxml2-dev \
-        libxslt-dev \
-        openjpeg-dev \
+#        freetype-dev \
+#        jpeg-dev \
+#        lcms2-dev \
+#        libffi-dev \
+#        libxml2-dev \
+#        libxslt-dev \
+#        openjpeg-dev \
         openldap-dev \
-        py2-pip \
-        python-dev \
-        tiff-dev \
-        zlib-dev \
+#        py2-pip \
+#        python-dev \
+#        tiff-dev \
+#        zlib-dev \
     && find -name "*.pyc" -delete
 
 ADD uuid.py /usr/lib/python2.7/
