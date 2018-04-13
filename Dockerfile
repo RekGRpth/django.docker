@@ -15,6 +15,7 @@ RUN apk add --no-cache \
         libxml2-dev \
         libxslt \
         libxslt-dev \
+        openjpeg \
         openjpeg-dev \
         openldap-dev \
         py2-cairo \
@@ -26,6 +27,7 @@ RUN apk add --no-cache \
         python-dev \
         shadow \
         su-exec \
+        tiff \
         tiff-dev \
         tzdata \
         uwsgi-python \
