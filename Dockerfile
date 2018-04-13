@@ -20,6 +20,7 @@ RUN apk add --no-cache \
         openldap-dev \
         py2-cairo \
         py2-dateutil \
+        py2-pillow \
         py2-pip \
         py2-psycopg2 \
         py-setuptools \
