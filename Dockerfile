@@ -98,4 +98,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 VOLUME  ${HOME}
 WORKDIR ${HOME}/app/billing
 
-CMD [ "uwsgi", "--ini", "/data/uwsgi.ini" ]
+CMD [ "uwsgi", "--ini", "/data/django.ini" ]

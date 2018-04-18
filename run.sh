@@ -35,4 +35,4 @@ docker run \
     --publish 4323:4323 \
     --volume django:/data \
     --workdir /data/app/billing/lk \
-    rekgrpth/django uwsgi --ini /data/lk.uwsgi.ini
+    rekgrpth/django uwsgi --ini /data/lk-django.ini
