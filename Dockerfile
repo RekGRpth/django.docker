@@ -3,7 +3,6 @@ FROM alpine
 MAINTAINER RekGRpth
 
 ADD entrypoint.sh /
-ADD uuid.py /usr/lib/python2.7/
 
 COPY requirements.txt /tmp/
 COPY django-autocomplete-1.0.dev49.tar.gz /tmp/
@@ -60,6 +59,8 @@ RUN apk add --no-cache \
     && find -name "*.pyc" -delete \
     && chmod +x /entrypoint.sh \
     && usermod --home "${HOME}" "${USER}"
+
+ADD uuid.py /usr/lib/python2.7/
 
 VOLUME  ${HOME}
 
