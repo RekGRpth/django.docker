@@ -2,26 +2,21 @@ FROM alpine
 
 MAINTAINER RekGRpth
 
+ADD entrypoint.sh /
+ADD uuid.py /usr/lib/python2.7/
+
 COPY requirements.txt /tmp/
 COPY django-autocomplete-1.0.dev49.tar.gz /tmp/
 
+ENV HOME=/data \
+    LANG=ru_RU.UTF-8 \
+    TZ=Asia/Yekaterinburg \
+    USER=uwsgi \
+    GROUP=uwsgi \
+    PYTHONIOENCODING=UTF-8
+
 RUN apk add --no-cache \
         alpine-sdk \
-#        freetype-dev \
-#        jpeg \
-#        jpeg-dev \
-#        lcms2 \
-#        lcms2-dev \
-#        libffi \
-#        libffi-dev \
-#        libjpeg-turbo \
-#        libxml2 \
-#        libxml2-dev \
-#        libxslt \
-#        libxslt-dev \
-#        openjpeg \
-#        openjpeg-dev \
-#        openldap \
         openldap-dev \
         py2-cairo \
         py2-dateutil \
@@ -31,7 +26,6 @@ RUN apk add --no-cache \
         py2-lxml \
         py2-netaddr \
         py2-olefile \
-#        py2-paramiko \
         py2-pexpect \
         py2-pillow \
         py2-pip \
@@ -39,8 +33,6 @@ RUN apk add --no-cache \
         py2-ptyprocess \
         py2-pygments \
         py2-pyldap \
-#        py2-pypdf2 \
-#        py2-reportlab \
         py2-requests \
         py2-six \
         py2-snmp \
@@ -51,12 +43,8 @@ RUN apk add --no-cache \
         python-dev \
         shadow \
         su-exec \
-#        tiff \
-#        tiff-dev \
         tzdata \
         uwsgi-python \
-#        zlib \
-#        zlib-dev \
     && pip install --no-cache-dir --requirement /tmp/requirements.txt \
     && rm -f /tmp/requirements.txt \
     && cd /tmp \
@@ -68,34 +56,15 @@ RUN apk add --no-cache \
     && rm -rf /tmp/django-autocomplete-1.0.dev49 \
     && apk del \
         alpine-sdk \
-#        freetype-dev \
-#        jpeg-dev \
-#        lcms2-dev \
-#        libffi-dev \
-#        libxml2-dev \
-#        libxslt-dev \
-#        openjpeg-dev \
         openldap-dev \
-#        py2-pip \
-#        python-dev \
-#        tiff-dev \
-#        zlib-dev \
-    && find -name "*.pyc" -delete
-
-ADD uuid.py /usr/lib/python2.7/
-
-ENV HOME=/data \
-    LANG=ru_RU.UTF-8 \
-    TZ=Asia/Yekaterinburg \
-    USER=uwsgi \
-    GROUP=uwsgi \
-    PYTHONIOENCODING=UTF-8
-
-ADD entrypoint.sh /
-RUN chmod +x /entrypoint.sh && usermod --home "${HOME}" "${USER}"
-ENTRYPOINT ["/entrypoint.sh"]
+    && find -name "*.pyc" -delete \
+    && chmod +x /entrypoint.sh \
+    && usermod --home "${HOME}" "${USER}"
 
 VOLUME  ${HOME}
+
 WORKDIR ${HOME}/app/billing
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD [ "uwsgi", "--ini", "/data/django.ini" ]
