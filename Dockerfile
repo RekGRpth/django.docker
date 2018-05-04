@@ -12,7 +12,8 @@ ENV HOME=/data \
     TZ=Asia/Yekaterinburg \
     USER=uwsgi \
     GROUP=uwsgi \
-    PYTHONIOENCODING=UTF-8
+    PYTHONIOENCODING=UTF-8 \
+    PYTHONPATH=/data/app/billing
 
 RUN apk add --no-cache \
         alpine-sdk \
@@ -67,7 +68,5 @@ VOLUME  ${HOME}
 WORKDIR ${HOME}/app/billing
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-ENV PYTHONPATH=${WORKDIR}
 
 CMD [ "uwsgi", "--ini", "/data/django.ini" ]
