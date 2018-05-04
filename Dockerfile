@@ -68,4 +68,6 @@ WORKDIR ${HOME}/app/billing
 
 ENTRYPOINT ["/entrypoint.sh"]
 
+ENV PYTHONPATH=${WORKDIR}
+
 CMD [ "uwsgi", "--ini", "/data/django.ini" ]
