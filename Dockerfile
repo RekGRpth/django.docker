@@ -45,6 +45,7 @@ RUN apk add --no-cache \
         su-exec \
         tzdata \
         uwsgi-python \
+    && pip install --upgrade pip \
     && pip install --no-cache-dir --requirement /tmp/requirements.txt \
     && rm -f /tmp/requirements.txt \
     && cd /tmp \
