@@ -19,7 +19,7 @@ RUN apk add --no-cache \
         alpine-sdk \
         libcrypto1.0 \
         openldap-dev \
-#        openssl \
+        openssl \
         py2-cairo \
         py2-dateutil \
         py2-decorator \
