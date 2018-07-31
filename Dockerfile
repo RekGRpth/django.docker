@@ -17,7 +17,9 @@ ENV HOME=/data \
 
 RUN apk add --no-cache \
         alpine-sdk \
+        libcrypto1.0 \
         openldap-dev \
+#        openssl \
         py2-cairo \
         py2-dateutil \
         py2-decorator \
@@ -60,7 +62,9 @@ RUN apk add --no-cache \
         openldap-dev \
     && find -name "*.pyc" -delete \
     && chmod +x /entrypoint.sh \
-    && usermod --home "${HOME}" "${USER}"
+    && usermod --home "${HOME}" "${USER}" \
+    && (grep -q '^openssl_conf' /etc/ssl/openssl.cnf || sed -i '1iopenssl_conf = openssl_def' /etc/ssl/openssl.cnf) \
+    && echo "[openssl_def]\nengines = engine_section\n[engine_section]\ngost = gost_section\n[gost_section]\nengine_id = gost\ndefault_algorithms = ALL\nCRYPT_PARAMS = id-Gost28147-89-CryptoPro-A-ParamSet" >> /etc/ssl/openssl.cnf
 
 ADD uuid.py /usr/lib/python2.7/
 
