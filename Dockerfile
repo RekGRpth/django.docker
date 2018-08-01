@@ -17,6 +17,7 @@ ENV HOME=/data \
 
 RUN apk add --no-cache \
         alpine-sdk \
+        ca-certificates \
         libcrypto1.0 \
         openldap-dev \
         openssl \
@@ -60,6 +61,7 @@ RUN apk add --no-cache \
     && apk del \
         alpine-sdk \
         openldap-dev \
+        python-dev \
     && find -name "*.pyc" -delete \
     && chmod +x /entrypoint.sh \
     && usermod --home "${HOME}" "${USER}" \
