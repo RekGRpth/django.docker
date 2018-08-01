@@ -17,10 +17,8 @@ ENV HOME=/data \
 
 RUN apk add --no-cache \
         alpine-sdk \
-        ca-certificates \
         libcrypto1.0 \
         openldap-dev \
-        openssl \
         py2-cairo \
         py2-dateutil \
         py2-decorator \
@@ -65,6 +63,8 @@ RUN apk add --no-cache \
     && find -name "*.pyc" -delete \
     && chmod +x /entrypoint.sh \
     && usermod --home "${HOME}" "${USER}" \
+    && apk add --no-cache \
+        openssl \
     && sed -i '1iopenssl_conf = openssl_def' /etc/ssl/openssl.cnf \
     && echo "[openssl_def]" >> /etc/ssl/openssl.cnf \
     && echo "engines = engine_section" >> /etc/ssl/openssl.cnf \
