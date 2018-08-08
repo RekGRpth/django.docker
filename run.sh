@@ -20,6 +20,7 @@ docker run \
     --hostname django \
     --name django \
     --publish 4322:4322 \
+    --restart always \
     --volume django:/data \
     rekgrpth/django
 docker run \
@@ -33,6 +34,7 @@ docker run \
     --hostname lk-django \
     --name lk-django \
     --publish 4323:4323 \
+    --restart always \
     --volume django:/data \
     --workdir /data/app/billing/lk \
     rekgrpth/django uwsgi --ini /data/lk-django.ini
