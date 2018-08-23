@@ -18,6 +18,7 @@ docker run \
     --env PYTHONPATH="/data/app:/data/app/billing" \
     --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --hostname django \
+    --link postgres \
     --name django \
     --publish 4322:4322 \
     --restart always \
@@ -32,6 +33,8 @@ docker run \
     --env PYTHONPATH="/data/app:/data/app/billing:/data/app/billing/lk" \
     --env DJANGO_SETTINGS_MODULE="lk_settings" \
     --hostname lk-django \
+    --link django \
+    --link postgres \
     --name lk-django \
     --publish 4323:4323 \
     --restart always \
