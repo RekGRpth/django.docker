@@ -8,6 +8,7 @@ docker rm django
 docker rm lk-django
 docker pull rekgrpth/django || exit $?
 docker volume create django || exit $?
+docker network create my
 docker run \
     --add-host `hostname -f`:`ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'` \
     --add-host cherry-`hostname -f`:`ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'` \
@@ -18,8 +19,8 @@ docker run \
     --env PYTHONPATH="/data/app:/data/app/billing" \
     --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --hostname django \
-    --link postgres \
     --name django \
+    --network my \
     --restart always \
     --volume django:/data \
     rekgrpth/django
@@ -32,9 +33,8 @@ docker run \
     --env PYTHONPATH="/data/app:/data/app/billing:/data/app/billing/lk" \
     --env DJANGO_SETTINGS_MODULE="lk_settings" \
     --hostname lk-django \
-    --link django \
-    --link postgres \
     --name lk-django \
+    --network my \
     --restart always \
     --volume django:/data \
     --workdir /data/app/billing/lk \
