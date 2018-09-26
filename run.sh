@@ -12,12 +12,13 @@ docker network create my
 docker run \
     --add-host ldap.t72.ru:$(getent hosts ldap.t72.ru | cut -d ' ' -f 1) \
     --detach \
-    --env USER_ID=$(id -u) \
+    --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --env GROUP_ID=$(id -g) \
     --env PYTHONPATH="/data/app:/data/app/billing" \
-    --env DJANGO_SETTINGS_MODULE="billing.settings" \
+    --env USER_ID=$(id -u) \
     --hostname django \
     --link nginx:cherry-$(hostname -f) \
+    --link nginx:$(hostname -f) \
     --name django \
     --network my \
     --restart always \
@@ -25,12 +26,13 @@ docker run \
     rekgrpth/django
 docker run \
     --detach \
-    --env USER_ID=$(id -u) \
+    --env DJANGO_SETTINGS_MODULE="lk_settings" \
     --env GROUP_ID=$(id -g) \
     --env PYTHONPATH="/data/app:/data/app/billing:/data/app/billing/lk" \
-    --env DJANGO_SETTINGS_MODULE="lk_settings" \
+    --env USER_ID=$(id -u) \
     --hostname lk-django \
     --link nginx:django-$(hostname -f) \
+    --link nginx:$(hostname -f) \
     --name lk-django \
     --network my \
     --restart always \
