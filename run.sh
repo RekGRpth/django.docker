@@ -10,29 +10,27 @@ docker pull rekgrpth/django || exit $?
 docker volume create django || exit $?
 docker network create my
 docker run \
-    --add-host `hostname -f`:`ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'` \
-    --add-host cherry-`hostname -f`:`ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'` \
-    --add-host ldap.t72.ru:`getent hosts ldap.t72.ru | cut -d ' ' -f 1` \
+    --add-host ldap.t72.ru:$(getent hosts ldap.t72.ru | cut -d ' ' -f 1) \
     --detach \
     --env USER_ID=$(id -u) \
     --env GROUP_ID=$(id -g) \
     --env PYTHONPATH="/data/app:/data/app/billing" \
     --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --hostname django \
+    --link nginx:cherry-$(hostname -f) \
     --name django \
     --network my \
     --restart always \
     --volume django:/data \
     rekgrpth/django
 docker run \
-    --add-host `hostname -f`:`ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'` \
-    --add-host django-`hostname -f`:`ip -4 addr show docker0 | grep -oP 'inet \K[\d.]+'` \
     --detach \
     --env USER_ID=$(id -u) \
     --env GROUP_ID=$(id -g) \
     --env PYTHONPATH="/data/app:/data/app/billing:/data/app/billing/lk" \
     --env DJANGO_SETTINGS_MODULE="lk_settings" \
     --hostname lk-django \
+    --link nginx:django-$(hostname -f) \
     --name lk-django \
     --network my \
     --restart always \
