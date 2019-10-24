@@ -8,7 +8,7 @@ docker rm django
 docker rm lk-django
 docker pull rekgrpth/django || exit $?
 docker volume create django || exit $?
-docker network create my
+docker network create --opt com.docker.network.bridge.name=docker docker
 docker run \
     --add-host ldap.t72.ru:$(getent hosts ldap.t72.ru | cut -d ' ' -f 1) \
     --detach \
@@ -20,7 +20,7 @@ docker run \
     --link nginx:cherry-$(hostname -f) \
     --link nginx:$(hostname -f) \
     --name django \
-    --network my \
+    --network docker \
     --restart always \
     --volume django:/data \
     rekgrpth/django
@@ -34,7 +34,7 @@ docker run \
     --link nginx:django-$(hostname -f) \
     --link nginx:$(hostname -f) \
     --name lk-django \
-    --network my \
+    --network docker \
     --restart always \
     --volume django:/data \
     --workdir /data/app/billing/lk \
