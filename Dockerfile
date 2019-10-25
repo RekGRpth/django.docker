@@ -1,54 +1,102 @@
-FROM alpine
-
-MAINTAINER RekGRpth
-
-ADD entrypoint.sh /
-
-COPY requirements.txt /tmp/
+FROM rekgrpth/gost
 COPY django-autocomplete-1.0.dev49.tar.gz /tmp/
-
-ENV HOME=/data \
-    LANG=ru_RU.UTF-8 \
-    TZ=Asia/Yekaterinburg \
-    USER=uwsgi \
-    GROUP=uwsgi \
+ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
-    PYTHONPATH=/data/app/billing
-
-RUN apk add --no-cache \
-        alpine-sdk \
-        libcrypto1.0 \
+    USER=django
+VOLUME "${HOME}"
+RUN set -ex \
+    && addgroup -S "${GROUP}" \
+    && adduser -D -S -h "${HOME}" -s /sbin/nologin -G "${GROUP}" "${USER}" \
+    && apk add --no-cache --virtual .build-deps \
+        cairo-dev \
+        gcc \
+        jpeg-dev \
+        libxml2-dev \
+        libxslt-dev \
+        linux-headers \
+        make \
+        musl-dev \
+        openjpeg-dev \
         openldap-dev \
-        py2-cairo \
-        py2-dateutil \
-        py2-decorator \
-        py2-httplib2 \
-        py2-ipaddress \
-        py2-lxml \
-        py2-netaddr \
-        py2-olefile \
-        py2-pexpect \
-        py2-pillow \
+        pcre2-dev \
+        pcre-dev \
+        postgresql-dev \
         py2-pip \
-        py2-psycopg2 \
-        py2-ptyprocess \
-        py2-pygments \
-        py2-pyldap \
-        py2-requests \
-        py2-six \
-        py2-snmp \
-        py2-wcwidth \
-        py-ipaddr \
-        py-setuptools \
-        python \
         python-dev \
-        shadow \
-        su-exec \
-        tzdata \
-        uwsgi-python \
-    && pip install --upgrade pip \
-    && pip install --no-cache-dir --requirement /tmp/requirements.txt \
-    && rm -f /tmp/requirements.txt \
+        zlib-dev \
+    && pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir --prefix /usr/local \
+        appy==0.8.3 \
+        celery==3.0.16 \
+        decorator \
+        Django==1.4.5 \
+        django-auth-ldap==1.1.4 \
+        django-bootstrap-toolkit==2.15.0 \
+        django-celery==3.0.11 \
+        django-crispy-forms==1.2.3 \
+        django-dajax==0.9.2 \
+        django-dajaxice==0.7 \
+        django-debug-logging==0.4 \
+        django-debug-toolbar==1.3.2 \
+        django-disguise==0.0.1b \
+        django-endless-pagination==2.0 \
+        django-extensions==1.5.5 \
+        django-indexer==0.3.0 \
+        django-inplaceedit==1.4.1 \
+        django-kombu==0.9.4 \
+        django-paging==0.2.4 \
+        django-picklefield==0.3.0 \
+        Django-Select2==4.2.2 \
+        django-simple-captcha==0.4.5 \
+        django-social-auth==0.7.22 \
+        django-social-auth-trello==1.0.3 \
+        django-spaghetti-and-meatballs==0.1.1 \
+        django-static-compiler==0.3.1 \
+        django-supervisor==0.3.4 \
+        django-tables2==1.0.4 \
+        django-templatetag-sugar==0.1 \
+        django-ticketing==0.7.4 \
+        django-webodt==0.3.1 \
+        html5lib==0.90 \
+        httplib2 \
+        ipaddr \
+        ipaddress \
+        ipython \
+        kombu==2.5.7 \
+        lxml \
+        mongoengine==0.8.7 \
+        netaddr \
+        olefile \
+        openpyxl==2.1.4 \
+        paramiko==1.12.1 \
+        passlib==1.6.2 \
+        pexpect \
+        pika==0.9.14 \
+        Pillow \
+        pisa==3.0.32 \
+        psycopg2 \
+        ptyprocess \
+        puka==0.0.7 \
+        pycairo \
+        Pygments \
+        PyJWT==1.4.0 \
+        pyldap \
+        pymongo==2.7 \
+        pyPdf==1.13 \
+        pysnmp \
+        python-dateutil \
+        reportlab==2.5 \
+        requests \
+        six \
+        suds==0.4 \
+        uuid \
+        uwsgi \
+        uwsgidecorators==1.1.0 \
+        wcwidth \
+        wheel==0.24.0 \
+        workdays==1.3 \
+        xlrd \
+        xlwt==0.7.4 \
     && cd /tmp \
     && tar -zxpf django-autocomplete-1.0.dev49.tar.gz \
     && cd django-autocomplete-1.0.dev49 \
@@ -56,33 +104,10 @@ RUN apk add --no-cache \
     && cd / \
     && rm -f /tmp/django-autocomplete-1.0.dev49.tar.gz \
     && rm -rf /tmp/django-autocomplete-1.0.dev49 \
-    && apk del \
-        alpine-sdk \
-        openldap-dev \
-        python-dev \
-    && find -name "*.pyc" -delete \
-    && chmod +x /entrypoint.sh \
-    && usermod --home "${HOME}" "${USER}" \
-    && apk add --no-cache \
-        openssl \
-    && sed -i '1iopenssl_conf = openssl_def' /etc/ssl/openssl.cnf \
-    && echo "[openssl_def]" >> /etc/ssl/openssl.cnf \
-    && echo "engines = engine_section" >> /etc/ssl/openssl.cnf \
-    && echo "" >> /etc/ssl/openssl.cnf \
-    && echo "[engine_section]" >> /etc/ssl/openssl.cnf \
-    && echo "gost = gost_section" >> /etc/ssl/openssl.cnf \
-    && echo "" >> /etc/ssl/openssl.cnf \
-    && echo "[gost_section]" >> /etc/ssl/openssl.cnf \
-    && echo "engine_id = gost" >> /etc/ssl/openssl.cnf \
-    && echo "default_algorithms = ALL" >> /etc/ssl/openssl.cnf \
-    && echo "CRYPT_PARAMS = id-Gost28147-89-CryptoPro-A-ParamSet" >> /etc/ssl/openssl.cnf
-
-ADD uuid.py /usr/lib/python2.7/
-
-VOLUME  ${HOME}
-
-WORKDIR ${HOME}/app/billing
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD [ "uwsgi", "--ini", "/data/django.ini" ]
+    && apk add --no-cache --virtual .django-rundeps \
+        openssh-client \
+        python \
+        sshpass \
+        $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | sort -u | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }') \
+    && (strip /usr/local/bin/* /usr/local/lib/*.so || true) \
+    && apk del --no-cache .build-deps

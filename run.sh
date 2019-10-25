@@ -14,7 +14,7 @@ docker run \
     --detach \
     --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --env GROUP_ID=$(id -g) \
-    --env PYTHONPATH="/data/app:/data/app/billing" \
+    --env PYTHONPATH="/home/app/billing:/home/app:/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages" \
     --env USER_ID=$(id -u) \
     --hostname django \
     --link nginx:cherry-$(hostname -f) \
@@ -22,13 +22,13 @@ docker run \
     --name django \
     --network docker \
     --restart always \
-    --volume django:/data \
-    rekgrpth/django
+    --volume django:/home \
+    rekgrpth/django uwsgi --ini django.ini
 docker run \
     --detach \
     --env DJANGO_SETTINGS_MODULE="lk_settings" \
     --env GROUP_ID=$(id -g) \
-    --env PYTHONPATH="/data/app:/data/app/billing:/data/app/billing/lk" \
+    --env PYTHONPATH="/home/app/billing/lk:/home/app/billing:/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages" \
     --env USER_ID=$(id -u) \
     --hostname lk-django \
     --link nginx:django-$(hostname -f) \
@@ -36,6 +36,5 @@ docker run \
     --name lk-django \
     --network docker \
     --restart always \
-    --volume django:/data \
-    --workdir /data/app/billing/lk \
-    rekgrpth/django uwsgi --ini /data/lk-django.ini
+    --volume django:/home \
+    rekgrpth/django uwsgi --ini lk-django.ini
