@@ -22,6 +22,8 @@ docker run \
     --name django \
     --network docker \
     --restart always \
+    --volume /etc/certs/$(hostname -d).crt:/etc/ssl/server.crt \
+    --volume /etc/certs/$(hostname -d).key:/etc/ssl/server.key \
     --volume django:/home \
     rekgrpth/django uwsgi --ini django.ini
 docker run \
@@ -36,5 +38,7 @@ docker run \
     --name lk-django \
     --network docker \
     --restart always \
+    --volume /etc/certs/$(hostname -d).crt:/etc/ssl/server.crt \
+    --volume /etc/certs/$(hostname -d).key:/etc/ssl/server.key \
     --volume django:/home \
     rekgrpth/django uwsgi --ini lk-django.ini
