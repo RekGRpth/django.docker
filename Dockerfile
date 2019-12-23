@@ -87,6 +87,7 @@ RUN set -ex \
         python-dateutil \
         reportlab==2.5 \
         requests \
+        sh \
         six \
         suds==0.4 \
         uuid \
