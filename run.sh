@@ -14,7 +14,9 @@ docker run \
     --detach \
     --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --env GROUP_ID=$(id -g) \
+    --env LANG=ru_RU.UTF-8 \
     --env PYTHONPATH="/home/app/billing:/home/app:/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages" \
+    --env TZ=Asia/Yekaterinburg \
     --env USER_ID=$(id -u) \
     --hostname django \
     --link nginx:cherry-$(hostname -f) \
@@ -30,7 +32,9 @@ docker run \
     --detach \
     --env DJANGO_SETTINGS_MODULE="lk_settings" \
     --env GROUP_ID=$(id -g) \
+    --env LANG=ru_RU.UTF-8 \
     --env PYTHONPATH="/home/app/billing/lk:/home/app/billing:/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages" \
+    --env TZ=Asia/Yekaterinburg \
     --env USER_ID=$(id -u) \
     --hostname lk-django \
     --link nginx:django-$(hostname -f) \
