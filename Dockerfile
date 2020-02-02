@@ -85,6 +85,7 @@ RUN set -ex \
         pyPdf==1.13 \
         pysnmp \
         python-dateutil \
+        PyYAML \
         reportlab==2.5 \
         requests \
         sh \
