@@ -9,6 +9,7 @@ RUN set -ex \
     && adduser -D -S -h "${HOME}" -s /sbin/nologin -G "${GROUP}" "${USER}" \
     && apk add --no-cache --virtual .build-deps \
         cairo-dev \
+        curl \
         gcc \
         jpeg-dev \
         libxml2-dev \
@@ -21,9 +22,14 @@ RUN set -ex \
         pcre2-dev \
         pcre-dev \
         postgresql-dev \
-        py2-pip \
-        python-dev \
+        py2-setuptools \
+        python2-dev \
         zlib-dev \
+    && mkdir -p /usr/src \
+    && cd /usr/src \
+    && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python2 get-pip.py \
+    && cd / \
     && pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir --prefix /usr/local \
         appy==0.8.3 \
@@ -105,7 +111,7 @@ RUN set -ex \
     && python setup.py install \
     && cd / \
     && rm -f /tmp/django-autocomplete-1.0.dev49.tar.gz \
-    && rm -rf /tmp/django-autocomplete-1.0.dev49 \
+    && rm -rf /tmp/django-autocomplete-1.0.dev49 /usr/src \
     && apk add --no-cache --virtual .django-rundeps \
         openssh-client \
         python \
