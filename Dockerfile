@@ -1,7 +1,8 @@
 FROM rekgrpth/gost
-COPY django-autocomplete-1.0.dev49.tar.gz /tmp/
+COPY django-autocomplete-1.0.dev49.tar.gz /usr/src/
 ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
+    PYTHONPATH=/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages \
     USER=django
 VOLUME "${HOME}"
 RUN set -ex \
@@ -28,10 +29,12 @@ RUN set -ex \
     && mkdir -p /usr/src \
     && cd /usr/src \
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-    && python2 get-pip.py \
+    && python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
+    && tar -zxpf django-autocomplete-1.0.dev49.tar.gz \
+    && cd django-autocomplete-1.0.dev49 \
+    && python2 setup.py install --prefix=/usr/local \
     && cd / \
-    && pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir --prefix /usr/local \
+    && pip install --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
         appy==0.8.3 \
         celery==3.0.16 \
         decorator \
@@ -105,16 +108,10 @@ RUN set -ex \
         workdays==1.3 \
         xlrd \
         xlwt==0.7.4 \
-    && cd /tmp \
-    && tar -zxpf django-autocomplete-1.0.dev49.tar.gz \
-    && cd django-autocomplete-1.0.dev49 \
-    && python setup.py install \
-    && cd / \
-    && rm -f /tmp/django-autocomplete-1.0.dev49.tar.gz \
-    && rm -rf /tmp/django-autocomplete-1.0.dev49 /usr/src \
+    && rm -rf /usr/src \
     && apk add --no-cache --virtual .django-rundeps \
         openssh-client \
-        python \
+        python2 \
         sshpass \
         $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | sort -u | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }') \
     && (strip /usr/local/bin/* /usr/local/lib/*.so || true) \
