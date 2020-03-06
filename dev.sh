@@ -4,7 +4,7 @@
 #docker push rekgrpth/django || exit $?
 docker pull rekgrpth/django || exit $?
 docker volume create django || exit $?
-docker network create --attachable --driver overlay docker || echo $?
+docker network create --attachable --opt com.docker.network.bridge.name=docker docker || echo $?
 docker stop django || echo $?
 docker stop lk-django || echo $?
 docker rm django || echo $?
