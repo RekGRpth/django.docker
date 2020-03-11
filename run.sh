@@ -4,8 +4,14 @@
 #docker push rekgrpth/django || exit $?
 docker pull rekgrpth/django || exit $?
 docker volume create django || exit $?
-docker network create --attachable --driver overlay docker || echo $?
-docker service create \
+docker network create --attachable --opt com.docker.network.bridge.name=docker docker || echo $?
+docker stop django || echo $?
+docker stop lk-django || echo $?
+docker rm django || echo $?
+docker rm lk-django || echo $?
+docker run \
+    --add-host ldap.t72.ru:$(getent hosts ldap.t72.ru | cut -d ' ' -f 1) \
+    --detach \
     --env DJANGO_SETTINGS_MODULE="billing.settings" \
     --env GROUP_ID=$(id -g) \
     --env LANG=ru_RU.UTF-8 \
@@ -13,12 +19,14 @@ docker service create \
     --env TZ=Asia/Yekaterinburg \
     --env USER_ID=$(id -u) \
     --hostname django \
-    --mount type=bind,source=/etc/certs,destination=/etc/certs \
-    --mount type=volume,source=django,destination=/home \
     --name django \
     --network name=docker \
+    --restart always \
+    --volume /etc/certs:/etc/certs \
+    --volume django:/home \
     rekgrpth/django uwsgi --ini django.ini
-docker service create \
+docker run \
+    --detach \
     --env DJANGO_SETTINGS_MODULE="lk_settings" \
     --env GROUP_ID=$(id -g) \
     --env LANG=ru_RU.UTF-8 \
@@ -26,8 +34,9 @@ docker service create \
     --env TZ=Asia/Yekaterinburg \
     --env USER_ID=$(id -u) \
     --hostname lk-django \
-    --mount type=bind,source=/etc/certs,destination=/etc/certs \
-    --mount type=volume,source=django,destination=/home \
     --name lk-django \
     --network name=docker \
+    --restart always \
+    --volume /etc/certs:/etc/certs \
+    --volume django:/home \
     rekgrpth/django uwsgi --ini lk-django.ini
