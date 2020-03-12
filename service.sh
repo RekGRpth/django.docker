@@ -15,6 +15,7 @@ docker service create \
     --hostname django \
     --mount type=bind,source=/etc/certs,destination=/etc/certs \
     --mount type=volume,source=django,destination=/home \
+    --mount type=volume,source=/run/postgresql,destination=/run/postgresql \
     --name django \
     --network name=docker \
     rekgrpth/django uwsgi --ini django.ini
@@ -28,6 +29,7 @@ docker service create \
     --hostname lk-django \
     --mount type=bind,source=/etc/certs,destination=/etc/certs \
     --mount type=volume,source=django,destination=/home \
+    --mount type=volume,source=/run/postgresql,destination=/run/postgresql \
     --name lk-django \
     --network name=docker \
     rekgrpth/django uwsgi --ini lk-django.ini

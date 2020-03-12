@@ -22,8 +22,9 @@ docker run \
     --name django \
     --network name=docker \
     --restart always \
-    --volume /etc/certs:/etc/certs \
     --volume django:/home \
+    --volume /etc/certs:/etc/certs \
+    --volume /run/postgresql:/run/postgresql \
     rekgrpth/django uwsgi --ini django.ini
 docker run \
     --detach \
@@ -37,6 +38,7 @@ docker run \
     --name lk-django \
     --network name=docker \
     --restart always \
-    --volume /etc/certs:/etc/certs \
     --volume django:/home \
+    --volume /etc/certs:/etc/certs \
+    --volume /run/postgresql:/run/postgresql \
     rekgrpth/django uwsgi --ini lk-django.ini
