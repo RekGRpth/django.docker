@@ -25,6 +25,7 @@ docker run \
     --volume django:/home \
     --volume /etc/certs:/etc/certs \
     --volume /run/postgresql:/run/postgresql \
+    --volume /run/uwsgi:/run/uwsgi \
     rekgrpth/django uwsgi --ini django.ini
 docker run \
     --detach \
@@ -41,4 +42,5 @@ docker run \
     --volume django:/home \
     --volume /etc/certs:/etc/certs \
     --volume /run/postgresql:/run/postgresql \
+    --volume /run/uwsgi:/run/uwsgi \
     rekgrpth/django uwsgi --ini lk-django.ini
