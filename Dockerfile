@@ -5,7 +5,7 @@ ENV GROUP=django \
     PYTHONPATH=/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages \
     USER=django
 VOLUME "${HOME}"
-RUN set -ex \
+RUN set -x \
     && addgroup -S "${GROUP}" \
     && adduser -D -S -h "${HOME}" -s /sbin/nologin -G "${GROUP}" "${USER}" \
     && apk add --no-cache --virtual .build-deps \

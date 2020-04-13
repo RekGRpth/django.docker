@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -x
 
 #docker build --tag rekgrpth/django . || exit $?
 #docker push rekgrpth/django || exit $?
