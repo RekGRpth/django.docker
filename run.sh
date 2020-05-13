@@ -1,9 +1,9 @@
 #!/bin/sh -ex
 
-#docker build --tag rekgrpth/django . || exit $?
-#docker push rekgrpth/django || exit $?
-docker pull rekgrpth/django || exit $?
-docker volume create django || exit $?
+#docker build --tag rekgrpth/django .
+#docker push rekgrpth/django
+docker pull rekgrpth/django
+docker volume create django
 docker network create --attachable --opt com.docker.network.bridge.name=docker docker || echo $?
 docker stop django || echo $?
 docker stop lk-django || echo $?
