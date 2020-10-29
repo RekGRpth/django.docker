@@ -117,4 +117,8 @@ RUN exec 2>&1 \
     && (strip /usr/local/bin/* /usr/local/lib/*.so || true) \
     && apk del --no-cache .build-deps \
     && rm -rf /usr/src /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man \
+    && mkdir -p /home/bp/python/mark5 \
+    && ln -fs /home/app /home/bp/python/mark5/cherry_django \
+    && mkdir -p /usr/local/cherry \
+    && ln -fs /home/app /usr/local/cherry/cherry_django \
     && echo done
