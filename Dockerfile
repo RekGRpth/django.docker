@@ -29,7 +29,7 @@ RUN exec 2>&1 \
         zlib-dev \
     && mkdir -p /usr/src \
     && cd /usr/src \
-    && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip.py \
     && python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
     && tar -zxpf django-autocomplete-1.0.dev49.tar.gz \
     && cd django-autocomplete-1.0.dev49 \
