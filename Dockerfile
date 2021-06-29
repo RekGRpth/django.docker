@@ -5,11 +5,10 @@ ENV GROUP=django \
     PYTHONPATH=/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages \
     USER=django
 VOLUME "${HOME}"
-RUN exec 2>&1 \
-    && set -ex \
-    && addgroup -S "${GROUP}" \
-    && adduser -D -S -h "${HOME}" -s /sbin/nologin -G "${GROUP}" "${USER}" \
-    && apk add --no-cache --virtual .build-deps \
+RUN set -eux; \
+    addgroup -S "${GROUP}"; \
+    adduser -D -S -h "${HOME}" -s /sbin/nologin -G "${GROUP}" "${USER}"; \
+    apk add --no-cache --virtual .build-deps \
         cairo-dev \
         curl \
         gcc \
@@ -27,15 +26,16 @@ RUN exec 2>&1 \
         py2-setuptools \
         python2-dev \
         zlib-dev \
-    && mkdir -p /usr/src \
-    && cd /usr/src \
-    && curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
-    && python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
-    && tar -zxpf django-autocomplete-1.0.dev49.tar.gz \
-    && cd django-autocomplete-1.0.dev49 \
-    && python2 setup.py install --prefix=/usr/local \
-    && cd / \
-    && pip install --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
+    ; \
+    mkdir -p /usr/src; \
+    cd /usr/src; \
+    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py; \
+    python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
+    tar -zxpf django-autocomplete-1.0.dev49.tar.gz; \
+    cd django-autocomplete-1.0.dev49; \
+    python2 setup.py install --prefix=/usr/local; \
+    cd /; \
+    pip install --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
         appy==0.8.3 \
         celery==3.0.16 \
         decorator \
@@ -109,17 +109,19 @@ RUN exec 2>&1 \
         workdays==1.3 \
         xlrd \
         xlwt==0.7.4 \
-    && apk add --no-cache --virtual .django-rundeps \
+    ; \
+    apk add --no-cache --virtual .django-rundeps \
         openssh-client \
         python2 \
         sshpass \
         $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | sort -u | while read -r lib; do test ! -e "/usr/local/lib/$lib" && echo "so:$lib"; done) \
-    && (strip /usr/local/bin/* /usr/local/lib/*.so || true) \
-    && apk del --no-cache .build-deps \
-    && rm -rf /usr/src /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man \
-    && find / -name "*.pyc" -delete \
-    && mkdir -p /home/bp/python/mark5 \
-    && ln -fs /home/app /home/bp/python/mark5/cherry_django \
-    && mkdir -p /usr/local/cherry \
-    && ln -fs /home/app /usr/local/cherry/cherry_django \
-    && echo done
+    ; \
+    (strip /usr/local/bin/* /usr/local/lib/*.so || true); \
+    apk del --no-cache .build-deps; \
+    rm -rf /usr/src /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
+    find / -name "*.pyc" -delete; \
+    mkdir -p /home/bp/python/mark5; \
+    ln -fs /home/app /home/bp/python/mark5/cherry_django; \
+    mkdir -p /usr/local/cherry; \
+    ln -fs /home/app /usr/local/cherry/cherry_django; \
+    echo done
