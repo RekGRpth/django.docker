@@ -36,17 +36,21 @@ RUN set -eux; \
         py2-setuptools \
         python2-dev \
         swig \
+        talloc-dev \
         zlib-dev \
     ; \
     mkdir -p /usr/src; \
     cd /usr/src; \
-    git clone --recursive https://github.com/RekGRpth/pyhtmldoc.git; \
-    git clone --recursive https://github.com/RekGRpth/pymustach.git; \
+    git clone https://github.com/RekGRpth/pyhandlebars.git; \
+    git clone https://github.com/RekGRpth/pyhtmldoc.git; \
+    git clone https://github.com/RekGRpth/pymustach.git; \
     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
     tar -zxpf django-autocomplete-1.0.dev49.tar.gz; \
     cd /usr/src/django-autocomplete-1.0.dev49; \
     python2 setup.py install --prefix=/usr/local; \
+    cd /usr/src/pyhandlebars; \
+    python2 setup.py install --prefix /usr/local; \
     cd /usr/src/pyhtmldoc; \
     python2 setup.py install --prefix /usr/local; \
     cd /usr/src/pymustach; \
