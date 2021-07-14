@@ -142,6 +142,8 @@ RUN set -eux; \
     apk del --no-cache .build-deps; \
     rm -rf /usr/src /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
     find / -name "*.pyc" -delete; \
+    find / -name "*.a" -delete; \
+    find / -name "*.la" -delete; \
     mkdir -p /home/bp/python/mark5; \
     ln -fs /home/app /home/bp/python/mark5/cherry_django; \
     mkdir -p /usr/local/cherry; \
