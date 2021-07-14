@@ -1,6 +1,4 @@
 FROM rekgrpth/pdf
-COPY fonts /usr/local/share/fonts
-COPY django-autocomplete-1.0.dev49.tar.gz /usr/src/
 ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
     PYTHONPATH=/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages \
@@ -41,13 +39,17 @@ RUN set -eux; \
     ; \
     mkdir -p /usr/src; \
     cd /usr/src; \
+    git clone https://bitbucket.org/RekGRpth/django.git; \
     git clone https://github.com/RekGRpth/pyhandlebars.git; \
     git clone https://github.com/RekGRpth/pyhtmldoc.git; \
     git clone https://github.com/RekGRpth/pymustach.git; \
     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
+    cd /usr/src/django; \
+    mkdir -p /usr/local/share/fonts; \
+    cp -rf fonts/* /usr/local/share/fonts; \
     tar -zxpf django-autocomplete-1.0.dev49.tar.gz; \
-    cd /usr/src/django-autocomplete-1.0.dev49; \
+    cd django-autocomplete-1.0.dev49; \
     python2 setup.py install --prefix=/usr/local; \
     cd /usr/src/pyhandlebars; \
     python2 setup.py install --prefix /usr/local; \
@@ -138,12 +140,12 @@ RUN set -eux; \
         sshpass \
         $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | sort -u | while read -r lib; do test ! -e "/usr/local/lib/$lib" && echo "so:$lib"; done) \
     ; \
-    (strip /usr/local/bin/* /usr/local/lib/*.so || true); \
     apk del --no-cache .build-deps; \
     rm -rf /usr/src /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
     find / -name "*.pyc" -delete; \
     find / -name "*.a" -delete; \
     find / -name "*.la" -delete; \
+    find /usr/bin /usr/lib /usr/local/bin /usr/local/lib -type f -exec strip '{}' \;; \
     mkdir -p /home/bp/python/mark5; \
     ln -fs /home/app /home/bp/python/mark5/cherry_django; \
     mkdir -p /usr/local/cherry; \
