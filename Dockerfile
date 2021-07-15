@@ -1,7 +1,8 @@
 FROM rekgrpth/pdf
+ARG PYTHON_VERSION=2.7
 ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
-    PYTHONPATH=/usr/local/lib/python2.7:/usr/local/lib/python2.7/lib-dynload:/usr/local/lib/python2.7/site-packages \
+    PYTHONPATH="${HOME}/app:${HOME}/app/billing:/usr/local/lib/python${PYTHON_VERSION}:/usr/local/lib/python${PYTHON_VERSION}/lib-dynload:/usr/local/lib/python${PYTHON_VERSION}/site-packages" \
     USER=django
 VOLUME "${HOME}"
 RUN set -eux; \
@@ -43,7 +44,7 @@ RUN set -eux; \
     git clone https://github.com/RekGRpth/pyhandlebars.git; \
     git clone https://github.com/RekGRpth/pyhtmldoc.git; \
     git clone https://github.com/RekGRpth/pymustach.git; \
-    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py; \
+    curl "https://bootstrap.pypa.io/pip/${PYTHON_VERSION}/get-pip.py" -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
     cd "${HOME}/django"; \
     mkdir -p /usr/local/share/fonts; \
@@ -150,16 +151,16 @@ RUN set -eux; \
     ln -fs /home/app /home/bp/python/mark5/cherry_django; \
     mkdir -p /usr/local/cherry; \
     ln -fs /home/app /usr/local/cherry/cherry_django; \
-    grep -r "Helvetica" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Helvetica|NimbusSans-Regular|g" "$FILE"; done; \
-    grep -r "TimesNewRoman" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|TimesNewRoman|NimbusRoman-Regular|g" "$FILE"; done; \
-    grep -r "Times New Roman" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Times New Roman|NimbusRoman-Regular|g" "$FILE"; done; \
-    grep -r "Times-Roman" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Times-Roman|NimbusRoman-Regular|g" "$FILE"; done; \
-    grep -r "Times-" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Times-|NimbusRoman-|g" "$FILE"; done; \
-    grep -r "Arial" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Arial|NimbusSans-Regular|g" "$FILE"; done; \
-    grep -r "Courier New" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Courier New|NimbusMonoPS-Regular|g" "$FILE"; done; \
-    grep -r "Courier" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Courier|NimbusMonoPS-Regular|g" "$FILE"; done; \
-    grep -r "/usr/share/fonts/dejavu" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|/usr/share/fonts/dejavu|/usr/local/share/fonts|g" "$FILE"; done; \
-    grep -r "DEFAULT_CSS = \"\"\"" /usr/local/lib/python2.7/site-packages/reportlab /usr/local/lib/python2.7/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|font-weight:bold;|font-weight:bold;font-family: NimbusSans-Bold;|g" "$FILE"; \
+    grep -r "Helvetica" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Helvetica|NimbusSans-Regular|g" "$FILE"; done; \
+    grep -r "TimesNewRoman" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|TimesNewRoman|NimbusRoman-Regular|g" "$FILE"; done; \
+    grep -r "Times New Roman" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Times New Roman|NimbusRoman-Regular|g" "$FILE"; done; \
+    grep -r "Times-Roman" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Times-Roman|NimbusRoman-Regular|g" "$FILE"; done; \
+    grep -r "Times-" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Times-|NimbusRoman-|g" "$FILE"; done; \
+    grep -r "Arial" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Arial|NimbusSans-Regular|g" "$FILE"; done; \
+    grep -r "Courier New" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Courier New|NimbusMonoPS-Regular|g" "$FILE"; done; \
+    grep -r "Courier" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|Courier|NimbusMonoPS-Regular|g" "$FILE"; done; \
+    grep -r "/usr/share/fonts/dejavu" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|/usr/share/fonts/dejavu|/usr/local/share/fonts|g" "$FILE"; done; \
+    grep -r "DEFAULT_CSS = \"\"\"" /usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab /usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do sed -i "s|font-weight:bold;|font-weight:bold;font-family: NimbusSans-Bold;|g" "$FILE"; \
     sed -i "s|font-weight: bold;|font-weight:bold;font-family: NimbusSans-Bold;|g" "$FILE"; \
     sed -i "s|font-style: italic;|font-style: italic;font-family: NimbusSans-Italic;|g" "$FILE"; \
     sed -i "/^DEFAULT_CSS/cfrom os import path, listdir\ndejavu = '/usr/local/share/fonts'\nfonts = {file.split('.')[0]: path.join(dejavu, file) for file in listdir(dejavu) if file.endswith('.ttf')}\nDEFAULT_CSS = '\\\n'.join(('@font-face { font-family: \"%s\"; src: \"%s\";%s%s }' % (name, file, ' font-weight: \"bold\";' if 'bold' in name.lower() else '', ' font-style: \"italic\";' if 'italic' in name.lower() or 'oblique' in name.lower() else '') for name, file in fonts.items())) + \"\"\"" "$FILE"; done; \
