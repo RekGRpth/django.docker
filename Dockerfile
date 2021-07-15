@@ -37,27 +37,27 @@ RUN set -eux; \
         talloc-dev \
         zlib-dev \
     ; \
-    mkdir -p /usr/src; \
-    cd /usr/src; \
+    mkdir -p "${HOME}"; \
+    cd "${HOME}"; \
     git clone https://bitbucket.org/RekGRpth/django.git; \
     git clone https://github.com/RekGRpth/pyhandlebars.git; \
     git clone https://github.com/RekGRpth/pyhtmldoc.git; \
     git clone https://github.com/RekGRpth/pymustach.git; \
     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
-    cd /usr/src/django; \
+    cd "${HOME}/django"; \
     mkdir -p /usr/local/share/fonts; \
     cp -rf fonts/* /usr/local/share/fonts; \
     tar -zxpf django-autocomplete-1.0.dev49.tar.gz; \
     cd django-autocomplete-1.0.dev49; \
     python2 setup.py install --prefix=/usr/local; \
-    cd /usr/src/pyhandlebars; \
+    cd "${HOME}/pyhandlebars"; \
     python2 setup.py install --prefix /usr/local; \
-    cd /usr/src/pyhtmldoc; \
+    cd "${HOME}/pyhtmldoc"; \
     python2 setup.py install --prefix /usr/local; \
-    cd /usr/src/pymustach; \
+    cd "${HOME}/pymustach"; \
     python2 setup.py install --prefix /usr/local; \
-    cd /; \
+    cd "${HOME}"; \
     pip install --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
         appy==0.8.3 \
         celery==3.0.16 \
@@ -142,10 +142,10 @@ RUN set -eux; \
     ; \
     find /usr/local/bin /usr/local/lib -type f -exec strip '{}' \;; \
     apk del --no-cache .build-deps; \
-    rm -rf /usr/src /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
-    find / -name "*.pyc" -delete; \
-    find / -name "*.a" -delete; \
-    find / -name "*.la" -delete; \
+    find / -type f -name "*.pyc" -delete; \
+    find / -type f -name "*.a" -delete; \
+    find / -type f -name "*.la" -delete; \
+    rm -rf "${HOME}" /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
     mkdir -p /home/bp/python/mark5; \
     ln -fs /home/app /home/bp/python/mark5/cherry_django; \
     mkdir -p /usr/local/cherry; \
