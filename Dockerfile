@@ -135,6 +135,9 @@ RUN set -eux; \
         xlrd \
         xlwt==0.7.4 \
     ; \
+    cd "${HOME}/django"; \
+    cp -rf _fontdata.py "/usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab/pdfbase"; \
+    cd "${HOME}"; \
     apk add --no-cache --virtual .django-rundeps \
         openssh-client \
         python2 \
