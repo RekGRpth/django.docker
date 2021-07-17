@@ -1,4 +1,7 @@
 FROM rekgrpth/pdf
+ADD django-autocomplete-1.0.dev49.tar.gz "${HOME}/src/"
+ADD _fontdata.py "${HOME}/src/"
+ADD fonts /usr/local/share/fonts
 ARG PYTHON_VERSION=2.7
 ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
@@ -38,25 +41,20 @@ RUN set -eux; \
         talloc-dev \
         zlib-dev \
     ; \
-    mkdir -p "${HOME}"; \
-    cd "${HOME}"; \
-    git clone https://bitbucket.org/RekGRpth/django.git; \
+    cd "${HOME}/src"; \
     git clone https://github.com/RekGRpth/pyhandlebars.git; \
     git clone https://github.com/RekGRpth/pyhtmldoc.git; \
     git clone https://github.com/RekGRpth/pymustach.git; \
     curl "https://bootstrap.pypa.io/pip/${PYTHON_VERSION}/get-pip.py" -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
-    cd "${HOME}/django"; \
-    mkdir -p /usr/local/share/fonts; \
-    cp -rf fonts/* /usr/local/share/fonts; \
     tar -zxpf django-autocomplete-1.0.dev49.tar.gz; \
     cd django-autocomplete-1.0.dev49; \
     python2 setup.py install --prefix=/usr/local; \
-    cd "${HOME}/pyhandlebars"; \
+    cd "${HOME}/src/pyhandlebars"; \
     python2 setup.py install --prefix /usr/local; \
-    cd "${HOME}/pyhtmldoc"; \
+    cd "${HOME}/src/pyhtmldoc"; \
     python2 setup.py install --prefix /usr/local; \
-    cd "${HOME}/pymustach"; \
+    cd "${HOME}/src/pymustach"; \
     python2 setup.py install --prefix /usr/local; \
     cd "${HOME}"; \
     pip install --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
@@ -135,7 +133,7 @@ RUN set -eux; \
         xlrd \
         xlwt==0.7.4 \
     ; \
-    cd "${HOME}/django"; \
+    cd "${HOME}/src"; \
     cp -rf _fontdata.py "/usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab/pdfbase"; \
     cd "${HOME}"; \
     apk add --no-cache --virtual .django-rundeps \
