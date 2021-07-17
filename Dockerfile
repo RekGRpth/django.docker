@@ -1,5 +1,5 @@
 FROM rekgrpth/pdf
-ADD django-autocomplete-1.0.dev49.tar.gz "${HOME}/src/"
+ADD django-autocomplete-1.0.dev49 "${HOME}/src/django-autocomplete-1.0.dev49"
 ADD _fontdata.py "${HOME}/src/"
 ADD fonts /usr/local/share/fonts
 ARG PYTHON_VERSION=2.7
@@ -47,8 +47,7 @@ RUN set -eux; \
     git clone https://github.com/RekGRpth/pymustach.git; \
     curl "https://bootstrap.pypa.io/pip/${PYTHON_VERSION}/get-pip.py" -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
-    tar -zxpf django-autocomplete-1.0.dev49.tar.gz; \
-    cd django-autocomplete-1.0.dev49; \
+    cd "${HOME}/src/django-autocomplete-1.0.dev49"; \
     python2 setup.py install --prefix=/usr/local; \
     cd "${HOME}/src/pyhandlebars"; \
     python2 setup.py install --prefix /usr/local; \

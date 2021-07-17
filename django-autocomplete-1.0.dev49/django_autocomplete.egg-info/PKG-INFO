@@ -1,0 +1,19 @@
+Metadata-Version: 1.0
+Name: django-autocomplete
+Version: 1.0.dev49
+Summary: autocomplete utilities for django
+Home-page: http://bitbucket.org/tyrion/django-autocomplete
+Author: Germano Gabbianelli
+Author-email: tyrion.mx@gmail.com
+License: UNKNOWN
+Download-URL: http://bitbucket.org/tyrion/django-autocomplete/downloads
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Utilities
