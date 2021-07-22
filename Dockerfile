@@ -1,6 +1,5 @@
 FROM rekgrpth/pdf
 ADD django-autocomplete-1.0.dev49 "${HOME}/src/django-autocomplete-1.0.dev49"
-ADD _fontdata.py "${HOME}/src/"
 ADD fonts /usr/local/share/fonts
 ARG PYTHON_VERSION=2.7
 ENV GROUP=django \
@@ -132,8 +131,6 @@ RUN set -eux; \
         xlrd \
         xlwt==0.7.4 \
     ; \
-    cd "${HOME}/src"; \
-    cp -rf _fontdata.py "/usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab/pdfbase"; \
     cd "${HOME}"; \
     apk add --no-cache --virtual .django-rundeps \
         openssh-client \
