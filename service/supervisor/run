@@ -1,0 +1,10 @@
+#!/bin/sh
+
+exec 2>&1
+realpath "$0"
+set -ex
+cd "$(dirname "$0")"
+chmod 755 supervise
+chown "$USER":"$GROUP" supervise/ok supervise/control supervise/status
+cd "$HOME"
+exec chpst -u "$USER":"$GROUP" supervisord --configuration django.conf

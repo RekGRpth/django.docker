@@ -1,7 +1,9 @@
 FROM rekgrpth/pdf
 ADD django-autocomplete-1.0.dev49 "${HOME}/src/django-autocomplete-1.0.dev49"
 ADD fonts /usr/local/share/fonts
+ADD service /etc/service
 ARG PYTHON_VERSION=2.7
+CMD /etc/service/uwsgi/run
 ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
     PYTHONPATH="${HOME}/app:${HOME}/app/billing:/usr/local/lib/python${PYTHON_VERSION}:/usr/local/lib/python${PYTHON_VERSION}/lib-dynload:/usr/local/lib/python${PYTHON_VERSION}/site-packages" \
@@ -121,6 +123,7 @@ RUN set -eux; \
         sh \
         six \
         suds==0.4 \
+        supervisor \
         uuid \
         uwsgi \
         uwsgidecorators==1.1.0 \
@@ -135,6 +138,8 @@ RUN set -eux; \
     apk add --no-cache --virtual .django-rundeps \
         openssh-client \
         python2 \
+        runit \
+        sed \
         sshpass \
         $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | sort -u | while read -r lib; do test ! -e "/usr/local/lib/$lib" && echo "so:$lib"; done) \
     ; \
@@ -145,6 +150,7 @@ RUN set -eux; \
     find / -type f -name "*.a" -delete; \
     find / -type f -name "*.la" -delete; \
     rm -rf "${HOME}" /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
+    chmod -R 0755 /etc/service; \
     mkdir -p /home/bp/python/mark5; \
     ln -fs /home/app /home/bp/python/mark5/cherry_django; \
     mkdir -p /usr/local/cherry; \

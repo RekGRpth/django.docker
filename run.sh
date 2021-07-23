@@ -36,7 +36,7 @@ docker run \
     --name django \
     --network name=docker \
     --restart always \
-    rekgrpth/django uwsgi --ini django.ini
+    rekgrpth/django runsvdir /etc/service
 docker run \
     --detach \
     --env DJANGO_SETTINGS_MODULE="lk_settings" \
