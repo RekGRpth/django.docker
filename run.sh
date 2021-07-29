@@ -1,6 +1,5 @@
 #!/bin/sh -eux
 
-FROM ghcr.io/rekgrpth/django.docker
 docker volume create django
 docker network create --attachable --opt com.docker.network.bridge.name=docker docker || echo $?
 docker stop django || echo $?
