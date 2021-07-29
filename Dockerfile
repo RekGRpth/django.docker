@@ -136,7 +136,7 @@ RUN set -eux; \
         xlrd \
         xlwt==0.7.4 \
     ; \
-    cd "${HOME}"; \
+    cd /; \
     apk add --no-cache --virtual .django-rundeps \
         openssh-client \
         python2 \
