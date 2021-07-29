@@ -1,8 +1,6 @@
-#!/bin/sh -ex
+#!/bin/sh -eux
 
-#docker build --tag rekgrpth/django .
-#docker push rekgrpth/django
-docker pull rekgrpth/django
+FROM ghcr.io/rekgrpth/django.docker
 docker volume create django
 docker network create --attachable --opt com.docker.network.bridge.name=docker docker || echo $?
 docker stop django || echo $?
@@ -36,7 +34,7 @@ docker run \
     --name django \
     --network name=docker \
     --restart always \
-    rekgrpth/django runsvdir /etc/service
+    ghcr.io/rekgrpth/django.docker runsvdir /etc/service
 docker run \
     --detach \
     --env DJANGO_SETTINGS_MODULE="lk_settings" \
@@ -63,4 +61,4 @@ docker run \
     --name lk-django \
     --network name=docker \
     --restart always \
-    rekgrpth/django uwsgi --ini lk-django.ini
+    ghcr.io/rekgrpth/django.docker uwsgi --ini lk-django.ini
