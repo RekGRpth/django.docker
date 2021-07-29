@@ -8,7 +8,6 @@ ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
     PYTHONPATH="${HOME}/app:${HOME}/app/billing:/usr/local/lib/python${PYTHON_VERSION}:/usr/local/lib/python${PYTHON_VERSION}/lib-dynload:/usr/local/lib/python${PYTHON_VERSION}/site-packages" \
     USER=django
-VOLUME "${HOME}"
 RUN set -eux; \
     addgroup -S "${GROUP}"; \
     adduser -D -S -h "${HOME}" -s /sbin/nologin -G "${GROUP}" "${USER}"; \
