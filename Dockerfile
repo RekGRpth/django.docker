@@ -52,12 +52,16 @@ RUN set -eux; \
     curl "https://bootstrap.pypa.io/pip/${PYTHON_VERSION}/get-pip.py" -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
     cd "${HOME}/src/django-autocomplete-1.0.dev49"; \
+    python2 setup.py build; \
     python2 setup.py install --prefix=/usr/local; \
     cd "${HOME}/src/pyhandlebars"; \
+    python2 setup.py build; \
     python2 setup.py install --prefix /usr/local; \
     cd "${HOME}/src/pyhtmldoc"; \
+    python2 setup.py build; \
     python2 setup.py install --prefix /usr/local; \
     cd "${HOME}/src/pymustach"; \
+    python2 setup.py build; \
     python2 setup.py install --prefix /usr/local; \
     cd "${HOME}"; \
     pip install --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
