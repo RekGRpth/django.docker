@@ -3,7 +3,7 @@ ADD django-autocomplete-1.0.dev49 "${HOME}/src/django-autocomplete-1.0.dev49"
 ADD fonts /usr/local/share/fonts
 ADD service /etc/service
 ARG PYTHON_VERSION=2.7
-CMD /etc/service/uwsgi/run
+CMD [ "/etc/service/uwsgi/run" ]
 ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
     PYTHONPATH="${HOME}/app:${HOME}/app/billing:/usr/local/lib/python${PYTHON_VERSION}:/usr/local/lib/python${PYTHON_VERSION}/lib-dynload:/usr/local/lib/python${PYTHON_VERSION}/site-packages" \
