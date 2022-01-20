@@ -1,19 +1,20 @@
-FROM ghcr.io/rekgrpth/lib.docker
-ADD django-autocomplete-1.0.dev49 "${HOME}/src/django-autocomplete-1.0.dev49"
+ARG DOCKER_FROM=lib.docker:latest
+FROM "ghcr.io/rekgrpth/$DOCKER_FROM"
+ADD django-autocomplete-1.0.dev49 "$HOME/src/django-autocomplete-1.0.dev49"
 ADD fonts /usr/local/share/fonts
 ADD service /etc/service
-ARG PYTHON_VERSION=2.7
+ARG DOCKER_PYTHON_VERSION=2.7
 CMD [ "/etc/service/uwsgi/run" ]
 ENV GROUP=django \
     PYTHONIOENCODING=UTF-8 \
-    PYTHONPATH="${HOME}/app:${HOME}/app/billing:/usr/local/lib/python${PYTHON_VERSION}:/usr/local/lib/python${PYTHON_VERSION}/lib-dynload:/usr/local/lib/python${PYTHON_VERSION}/site-packages" \
+    PYTHONPATH="$HOME/app:$HOME/app/billing:/usr/local/lib/python$DOCKER_PYTHON_VERSION:/usr/local/lib/python$DOCKER_PYTHON_VERSION/lib-dynload:/usr/local/lib/python$DOCKER_PYTHON_VERSION/site-packages" \
     USER=django
 RUN set -eux; \
-    addgroup -S "${GROUP}"; \
-    adduser -D -S -h "${HOME}" -s /sbin/nologin -G "${GROUP}" "${USER}"; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
-    apk add --no-cache --virtual .build-deps \
+    addgroup -S "$GROUP"; \
+    adduser -S -D -G "$GROUP" -H -h "$HOME" -s /sbin/nologin "$USER"; \
+    apk add --no-cache --virtual .build \
         cairo-dev \
         cjson-dev \
         clang \
@@ -43,25 +44,26 @@ RUN set -eux; \
         talloc-dev \
         zlib-dev \
     ; \
-    cd "${HOME}/src"; \
+    mkdir -p "$HOME/src"; \
+    cd "$HOME/src"; \
     git clone https://github.com/RekGRpth/pyhandlebars.git; \
     git clone https://github.com/RekGRpth/pyhtmldoc.git; \
     git clone https://github.com/RekGRpth/pymustach.git; \
-    curl "https://bootstrap.pypa.io/pip/${PYTHON_VERSION}/get-pip.py" -o get-pip.py; \
+    curl "https://bootstrap.pypa.io/pip/$DOCKER_PYTHON_VERSION/get-pip.py" -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
-    cd "${HOME}/src/django-autocomplete-1.0.dev49"; \
+    cd "$HOME/src/django-autocomplete-1.0.dev49"; \
     python2 setup.py build; \
     python2 setup.py install --prefix=/usr/local; \
-    cd "${HOME}/src/pyhandlebars"; \
+    cd "$HOME/src/pyhandlebars"; \
     python2 setup.py build; \
     python2 setup.py install --prefix /usr/local; \
-    cd "${HOME}/src/pyhtmldoc"; \
+    cd "$HOME/src/pyhtmldoc"; \
     python2 setup.py build; \
     python2 setup.py install --prefix /usr/local; \
-    cd "${HOME}/src/pymustach"; \
+    cd "$HOME/src/pymustach"; \
     python2 setup.py build; \
     python2 setup.py install --prefix /usr/local; \
-    cd "${HOME}"; \
+    cd "$HOME"; \
     pip install --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
         appy==0.8.3 \
         celery==3.0.16 \
@@ -140,27 +142,28 @@ RUN set -eux; \
         xlwt==0.7.4 \
     ; \
     cd /; \
-    apk add --no-cache --virtual .django-rundeps \
+    apk add --no-cache --virtual .django \
         openssh-client \
         python2 \
         runit \
         sed \
         sshpass \
-        $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | sort -u | while read -r lib; do test ! -e "/usr/local/lib/$lib" && echo "so:$lib"; done) \
+        $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | grep -v "^$" | sort -u | while read -r lib; do test -z "$(find /usr/local/lib -name "$lib")" && echo "so:$lib"; done) \
     ; \
     find /usr/local/bin -type f -exec strip '{}' \;; \
     find /usr/local/lib -type f -name "*.so" -exec strip '{}' \;; \
-    apk del --no-cache .build-deps; \
-    find /usr -type f -name "*.pyc" -delete; \
-    find /usr -type f -name "*.a" -delete; \
+    apk del --no-cache .build; \
+    rm -rf "$HOME" /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
     find /usr -type f -name "*.la" -delete; \
-    rm -rf "${HOME}" /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
+    find /usr -type f -name "*.pyc" -delete; \
+    mkdir -p "$HOME"; \
+    chown -R "$USER":"$GROUP" "$HOME"; \
     chmod -R 0755 /etc/service; \
     mkdir -p /home/bp/python/mark5; \
     ln -fs /home/app /home/bp/python/mark5/cherry_django; \
     mkdir -p /usr/local/cherry; \
     ln -fs /home/app /usr/local/cherry/cherry_django; \
-    grep -r "DEFAULT_CSS = \"\"\"" "/usr/local/lib/python${PYTHON_VERSION}/site-packages/reportlab" "/usr/local/lib/python${PYTHON_VERSION}/site-packages/xhtml2pdf" | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do \
+    grep -r "DEFAULT_CSS = \"\"\"" "/usr/local/lib/python$DOCKER_PYTHON_VERSION/site-packages/reportlab" "/usr/local/lib/python$DOCKER_PYTHON_VERSION/site-packages/xhtml2pdf" | cut -d ':' -f 1 | sort -u | grep -E '.+\.py$' | while read -r FILE; do \
         sed -i "/^DEFAULT_CSS/cfrom os import path, listdir\ndejavu = '/usr/local/share/fonts'\nfonts = {file.split('.')[0]: path.join(dejavu, file) for file in listdir(dejavu) if file.endswith('.ttf')}\nDEFAULT_CSS = '\\\n'.join(('@font-face { font-family: \"%s\"; src: \"%s\";%s%s }' % (name, file, ' font-weight: \"bold\";' if 'bold' in name.lower() else '', ' font-style: \"italic\";' if 'italic' in name.lower() or 'oblique' in name.lower() else '') for name, file in fonts.items())) + \"\"\"" "$FILE"; \
     done; \
     echo done
