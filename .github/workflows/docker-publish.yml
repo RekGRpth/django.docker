@@ -26,7 +26,7 @@ jobs:
       cancel-in-progress: true
       group: ${{ github.ref }}/edge
     env:
-      DOCKER_FROM: gost.docker:edge
+      DOCKER_FROM: lib.docker:edge
       GITHUB_TOKEN: ${{ github.token }}
       INPUTS_TAG: edge
     runs-on: ubuntu-latest
