@@ -45,13 +45,13 @@ RUN set -eux; \
     ; \
     mkdir -p "$HOME/src"; \
     cd "$HOME/src"; \
-    git clone https://github.com/RekGRpth/pyhandlebars.git; \
+#    git clone https://github.com/RekGRpth/pyhandlebars.git; \
     git clone https://github.com/RekGRpth/pyhtmldoc.git; \
     git clone https://github.com/RekGRpth/pymustach.git; \
     curl "https://bootstrap.pypa.io/pip/$DOCKER_PYTHON_VERSION/get-pip.py" -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
     cd "$HOME/src/django-autocomplete-1.0.dev49" && python2 setup.py build && python2 setup.py install --prefix=/usr/local; \
-    cd "$HOME/src/pyhandlebars" && python2 setup.py build && python2 setup.py install --prefix /usr/local; \
+#    cd "$HOME/src/pyhandlebars" && python2 setup.py build && python2 setup.py install --prefix /usr/local; \
     cd "$HOME/src/pyhtmldoc" && python2 setup.py build && python2 setup.py install --prefix /usr/local; \
     cd "$HOME/src/pymustach" && python2 setup.py build && python2 setup.py install --prefix /usr/local; \
     cd "$HOME"; \
