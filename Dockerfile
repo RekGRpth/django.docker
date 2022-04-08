@@ -128,7 +128,7 @@ RUN set -eux; \
         wcwidth \
         wheel==0.24.0 \
         workdays==1.3 \
-        xhtml2pdf \
+        xhtml2pdf==0.2.5 \
         xlrd \
         xlwt==0.7.4 \
     ; \
