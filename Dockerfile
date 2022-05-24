@@ -37,11 +37,13 @@ RUN set -eux; \
         pcre2-dev \
         pcre-dev \
         postgresql-dev \
-        py2-setuptools \
-        python2-dev \
         swig \
         talloc-dev \
         zlib-dev \
+    ; \
+    apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing --virtual .edge \
+        py2-setuptools \
+        python2-dev \
     ; \
     mkdir -p "$HOME/src"; \
     cd "$HOME/src"; \
@@ -135,15 +137,18 @@ RUN set -eux; \
     cd /; \
     apk add --no-cache --virtual .django \
         openssh-client \
-        python2 \
         runit \
         sed \
         sshpass \
         $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | grep -v "^$" | grep -v -e libcrypto | sort -u | while read -r lib; do test -z "$(find /usr/local/lib -name "$lib")" && echo "so:$lib"; done) \
     ; \
+    apk add --no-cache --virtual .django-edge \
+        python2 \
+    ; \
     find /usr/local/bin -type f -exec strip '{}' \;; \
     find /usr/local/lib -type f -name "*.so" -exec strip '{}' \;; \
     apk del --no-cache .build; \
+    apk del --no-cache .edge; \
     rm -rf "$HOME" /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
     find /usr -type f -name "*.la" -delete; \
     find /usr -type f -name "*.pyc" -delete; \
