@@ -1,4 +1,4 @@
-FROM ghcr.io/rekgrpth/lib.docker:latest
+FROM ghcr.io/rekgrpth/lib.docker:alpine_3_15
 ADD django-autocomplete-1.0.dev49 "$HOME/src/django-autocomplete-1.0.dev49"
 ADD fonts /usr/local/share/fonts
 ADD service /etc/service
