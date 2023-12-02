@@ -139,7 +139,7 @@ RUN set -eux; \
         pexpect \
         pika==0.9.14 \
         Pillow \
-        pisa==3.0.32 \
+#        pisa==3.0.32 \
         psycopg2 \
         ptyprocess \
         puka==0.0.7 \
