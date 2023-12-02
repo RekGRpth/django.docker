@@ -1,4 +1,9 @@
-FROM ghcr.io/rekgrpth/lib.docker:alpine_3_15
+FROM alpine:3.15
+ADD bin /usr/local/bin
+ENTRYPOINT [ "docker_entrypoint.sh" ]
+ENV HOME=/home
+MAINTAINER RekGRpth
+WORKDIR "$HOME"
 ADD django-autocomplete-1.0.dev49 "$HOME/src/django-autocomplete-1.0.dev49"
 ADD fonts /usr/local/share/fonts
 ADD service /etc/service
@@ -9,16 +14,27 @@ ENV GROUP=django \
     PYTHONPATH="$HOME/app:$HOME/app/billing:/usr/local/lib/python$DOCKER_PYTHON_VERSION:/usr/local/lib/python$DOCKER_PYTHON_VERSION/lib-dynload:/usr/local/lib/python$DOCKER_PYTHON_VERSION/site-packages" \
     USER=django
 RUN set -eux; \
+    ln -fs su-exec /sbin/gosu; \
+    chmod +x /usr/local/bin/*.sh; \
     apk update --no-cache; \
     apk upgrade --no-cache; \
     addgroup -S "$GROUP"; \
     adduser -S -D -G "$GROUP" -H -h "$HOME" -s /sbin/nologin "$USER"; \
     apk add --no-cache --virtual .build \
+        autoconf \
+        automake \
+        bison \
         cairo-dev \
+        check-dev \
         cjson-dev \
         clang \
+        cups-dev \
         curl \
+        file \
+        flex \
+        fltk-dev \
         freetype-dev \
+        g++ \
         gcc \
         gettext-dev \
         git \
@@ -27,9 +43,13 @@ RUN set -eux; \
         jpeg-dev \
         json-c-dev \
         libffi-dev \
+        libgcrypt-dev \
+        libpng-dev \
+        libtool \
         libxml2-dev \
         libxslt-dev \
         linux-headers \
+        lmdb-dev \
         make \
         musl-dev \
         openjpeg-dev \
@@ -39,15 +59,31 @@ RUN set -eux; \
         postgresql-dev \
         py2-setuptools \
         python2-dev \
+        subunit-dev \
         swig \
-        talloc-dev \
+#        talloc-dev \
+        yaml-dev \
         zlib-dev \
     ; \
     mkdir -p "$HOME/src"; \
     cd "$HOME/src"; \
+    git clone -b master https://github.com/RekGRpth/htmldoc.git; \
+    git clone -b master https://github.com/RekGRpth/mustach.git; \
 #    git clone https://github.com/RekGRpth/pyhandlebars.git; \
     git clone https://github.com/RekGRpth/pyhtmldoc.git; \
     git clone https://github.com/RekGRpth/pymustach.git; \
+    ln -fs libldap.a /usr/lib/libldap_r.a; \
+    ln -fs libldap.so /usr/lib/libldap_r.so; \
+    cd "$HOME/src/htmldoc"; \
+    ./configure --without-gui; \
+    cd "$HOME/src/htmldoc/data"; \
+    make -j"$(nproc)" install; \
+    cd "$HOME/src/htmldoc/fonts"; \
+    make -j"$(nproc)" install; \
+    cd "$HOME/src/htmldoc/htmldoc"; \
+    make -j"$(nproc)" install; \
+    cd "$HOME/src/mustach"; \
+    make -j"$(nproc)" libs=single install; \
     curl "https://bootstrap.pypa.io/pip/$DOCKER_PYTHON_VERSION/get-pip.py" -o get-pip.py; \
     python2 get-pip.py --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local; \
     cd "$HOME/src/django-autocomplete-1.0.dev49" && pip install --no-cache-dir --prefix /usr/local .; \
@@ -134,11 +170,18 @@ RUN set -eux; \
     ; \
     cd /; \
     apk add --no-cache --virtual .django \
+        busybox-extras \
+        busybox-suid \
+        ca-certificates \
+        musl-locales \
         openssh-client \
         python2 \
         runit \
         sed \
+        shadow \
         sshpass \
+        su-exec \
+        tzdata \
         $(scanelf --needed --nobanner --format '%n#p' --recursive /usr/local | tr ',' '\n' | grep -v "^$" | grep -v -e libcrypto | sort -u | while read -r lib; do test -z "$(find /usr/local/lib -name "$lib")" && echo "so:$lib"; done) \
     ; \
     find /usr/local/bin -type f -exec strip '{}' \;; \
