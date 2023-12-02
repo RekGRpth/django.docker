@@ -151,7 +151,7 @@ RUN set -eux; \
         pyPdf==1.13 \
         pysnmp \
         python-dateutil \
-        PyYAML \
+        PyYAML==5.3 \
         reportlab==2.5 \
         requests \
         sh \
