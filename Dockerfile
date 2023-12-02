@@ -94,6 +94,7 @@ RUN set -eux; \
     pip install --no-python-version-warning --no-cache-dir --ignore-installed --prefix /usr/local \
         appy==0.8.3 \
         celery==3.0.16 \
+        configparser \
         decorator \
         Django==1.4.5 \
         django-auth-ldap==1.1.4 \
