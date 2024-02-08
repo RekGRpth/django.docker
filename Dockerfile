@@ -132,7 +132,7 @@ RUN set -eux; \
         kombu==2.5.7 \
         lxml \
         mongoengine==0.8.7 \
-        netaddr \
+        netaddr==0.9 \
         olefile \
         openpyxl==2.1.4 \
         paramiko==1.12.1 \
